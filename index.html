@@ -392,8 +392,11 @@ function go(v){if(!VIEWS.includes(v))v='home';VIEWS.forEach(x=>$('#v-'+x).classL
 try{history.replaceState(null,'','#'+v)}catch{}
 if(v==='home')renderHome();if(v==='pdf')PDFM.enter();if(v==='board')BDM.enter();window.scrollTo(0,0)}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});
-$('#fsBtn').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else(document.documentElement.requestFullscreen||(()=>Promise.reject()))().catch(()=>toast('المتصفح مانع ملء الشاشة هنا'))};
-document.addEventListener('fullscreenchange',()=>{$('#fsBtn').innerHTML=icon(document.fullscreenElement?'fsx':'fs');setTimeout(()=>{BDM.resize();PDFM.refit()},120)});
+$('#fsBtn').onclick=async()=>{const d=document,el=d.documentElement,inFs=d.fullscreenElement||d.webkitFullscreenElement;
+const fail=()=>toast('ملء الشاشة مش متاح هنا. افتح الملف في تبويب مستقل في المتصفح وجرّب تاني.');
+try{if(inFs){await(d.exitFullscreen?d.exitFullscreen():d.webkitExitFullscreen())}
+else if(el.requestFullscreen)await el.requestFullscreen();else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();else fail()}catch{fail()}};
+['fullscreenchange','webkitfullscreenchange'].forEach(n=>document.addEventListener(n,()=>{$('#fsBtn').innerHTML=icon(document.fullscreenElement||document.webkitFullscreenElement?'fsx':'fs');setTimeout(()=>{BDM.resize();PDFM.refit()},120)}));
 
 /* ---------- tasks ---------- */
 const SUBJ=[['ar','عربي','#16a34a'],['hi','تاريخ','#d97706'],['en','إنجليزي','#2563eb'],['sp','مادة التخصص','#9333ea']];
