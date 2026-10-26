@@ -306,7 +306,7 @@ function strokePath(ctx,s,color,w){const p=s.pts;ctx.strokeStyle=color;ctx.fillS
 if(p.length<4){ctx.beginPath();ctx.arc(p[0],p[1],w/2,0,6.2832);ctx.fill()}
 else{ctx.beginPath();ctx.moveTo(p[0],p[1]);let i=2;for(;i<p.length-2;i+=2)ctx.quadraticCurveTo(p[i],p[i+1],(p[i]+p[i+2])/2,(p[i+1]+p[i+3])/2);ctx.lineTo(p[i],p[i+1]);ctx.stroke()}}
 function drawStroke(ctx,s,al=1){ctx.save();ctx.lineCap='round';ctx.lineJoin='round';ctx.globalAlpha=al*(s.hl?.38:1);
-if(s.temp){const ow=s.ow||1.5;ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=7*DPR;ctx.shadowOffsetY=2.5*DPR;strokePath(ctx,s,'#000',s.w+2*ow);ctx.shadowColor='transparent';strokePath(ctx,s,'#ff1a1a',s.w)}
+if(s.temp){const ow=s.ow||1.5,a0=ctx.globalAlpha;ctx.globalAlpha=a0*.25;ctx.translate(0,ow*1.7);strokePath(ctx,s,'#000',s.w+3*ow);ctx.translate(0,-ow*1.7);ctx.globalAlpha=a0;strokePath(ctx,s,'#000',s.w+2*ow);strokePath(ctx,s,'#ff1a1a',s.w)}
 else strokePath(ctx,s,s.color,s.w);ctx.restore()}
 function splitStroke(s,x,y,r){if(!hitStroke(s,x,y,r))return null;const rr=r+s.w/2,p=s.pts,step=Math.max(rr*.5,.5),q=[];
 for(let i=0;i<p.length;i+=2){q.push(p[i],p[i+1]);if(i+3<p.length){const dx=p[i+2]-p[i],dy=p[i+3]-p[i+1],n=Math.floor(Math.hypot(dx,dy)/step);for(let j=1;j<=n;j++)q.push(p[i]+dx*j/(n+1),p[i+1]+dy*j/(n+1))}}
@@ -328,13 +328,14 @@ redo(){const o=this.r.pop();if(!o)return null;const a=this.arr(o.k);if(o.t==='a'
 clearAll(){Object.keys(this.pages).forEach(k=>this.pages[k]=[]);this.u=[];this.r=[]}}
 
 class Ink{
-constructor(o){this.o=o;this.fx=o.fx;this.ctx=o.fx.getContext('2d');this.ts=o.ts;this.tool=o.tool||'none';this.temp=[];this.tempLast=0;this.cur=null;this.ptrs=new Map();this.gest=null;this.pan=null;this.erasing=false;this.hover=null;this.raf=0;
+constructor(o){this.o=o;this.fx=o.fx;this.ctx=o.fx.getContext('2d');this.ts=o.ts;this.tool=o.tool||'none';this.temp=[];this.tempLast=0;this.cur=null;this.ptrs=new Map();this.gest=null;this.pan=null;this.erasing=false;this.hover=null;this.raf=0;this.fxHas=false;this.k=1;this.prev=[0,0];
+const lv=document.createElement('canvas');lv.className='live';lv.style.pointerEvents='none';o.fx.parentNode.insertBefore(lv,o.fx);this.live=lv;this.lctx=lv.getContext('2d');
 const f=this.fx;f.addEventListener('pointerdown',e=>this.down(e));f.addEventListener('pointermove',e=>this.move(e));
 ['pointerup','pointercancel'].forEach(n=>f.addEventListener(n,e=>this.up(e)));
 f.addEventListener('pointerleave',()=>{if(this.hover){this.hover=null;this.render()}});f.addEventListener('contextmenu',e=>e.preventDefault())}
-setTool(t){this.tool=t;this.cur=null;this.hover=null;this.o.onTool&&this.o.onTool(t);this.render()}
+setTool(t){this.tool=t;this.cur=null;this.clearLive();this.hover=null;this.o.onTool&&this.o.onTool(t);this.render()}
 gi(){const a=[...this.ptrs.values()];const [p,q]=a;return{cx:(p[0]+q[0])/2,cy:(p[1]+q[1])/2,d:Math.hypot(p[0]-q[0],p[1]-q[1])||1}}
-cancel(){this.cur=null;if(this.erasing){this.erasing=false;this.o.store.grp=false}}
+cancel(){this.cur=null;this.clearLive();if(this.erasing){this.erasing=false;this.o.store.grp=false}}
 down(e){const f=this.fx;
 if(e.pointerType==='touch'){this.ptrs.set(e.pointerId,[e.clientX,e.clientY]);if(this.ptrs.size===2){this.cancel();this.gest=this.gi();try{f.setPointerCapture(e.pointerId)}catch{}return}if(this.ptrs.size>2)return}
 const panBtn=e.button===1||e.button===2||(this.o.space&&this.o.space());
@@ -343,7 +344,7 @@ if(this.tool==='none')return;
 e.preventDefault();try{f.setPointerCapture(e.pointerId)}catch{}
 const [x,y]=this.o.toScene(e.clientX,e.clientY),sc=this.o.scale(),t=this.tool,st=this.ts[t];
 if(t==='eraser'){this.erasing=true;this.o.store.grp=false;this.erase(x,y)}
-else{this.cur={color:t==='temp'?'#ff1a1a':st.c,w:st.s*(t==='hl'?3.5:1)/sc,ow:1.6/sc,hl:t==='hl',temp:t==='temp',pts:[x,y]};if(t==='temp')this.tempLast=performance.now()}
+else{this.cur={color:t==='temp'?'#ff1a1a':st.c,w:st.s*(t==='hl'?3.5:1)/sc,ow:1.6/sc,hl:t==='hl',temp:t==='temp',pts:[x,y]};if(t==='temp')this.tempLast=performance.now();else this.startLive()}
 this.loop()}
 move(e){
 if(e.pointerType==='touch'&&this.ptrs.has(e.pointerId))this.ptrs.set(e.pointerId,[e.clientX,e.clientY]);
@@ -352,22 +353,27 @@ if(this.pan&&e.pointerId===this.pan[2]){this.o.onPan(e.clientX-this.pan[0],e.cli
 if(this.tool==='eraser'&&e.pointerType!=='touch'){const r=this.fx.getBoundingClientRect();this.hover=[e.clientX-r.left,e.clientY-r.top]}
 if(!this.cur&&!this.erasing){if(this.hover)this.render();return}
 const sc=this.o.scale();let evs=e.getCoalescedEvents?e.getCoalescedEvents():[];if(!evs.length)evs=[e];
-for(const ev of evs){const [x,y]=this.o.toScene(ev.clientX,ev.clientY);if(this.erasing)this.erase(x,y);else{const p=this.cur.pts,n=p.length;if(Math.hypot(x-p[n-2],y-p[n-1])*sc>.15)p.push(x,y)}}
-this.pred=null;if(this.cur&&e.getPredictedEvents){try{this.pred=e.getPredictedEvents().flatMap(ev=>this.o.toScene(ev.clientX,ev.clientY))}catch{}}
+for(const ev of evs){const [x,y]=this.o.toScene(ev.clientX,ev.clientY);if(this.erasing)this.erase(x,y);else{const p=this.cur.pts,n=p.length;if(Math.hypot(x-p[n-2],y-p[n-1])*sc>.8)p.push(x,y)}}
 this.loop()}
 up(e){this.ptrs.delete(e.pointerId);
 if(this.gest){if(this.ptrs.size<2)this.gest=null;return}
 if(this.pan&&e.pointerId===this.pan[2]){this.pan=null;return}
-this.pred=null;if(this.cur){const s=this.cur;this.cur=null;bbox(s);if(s.temp){this.temp.push(s);this.tempLast=performance.now()}else{this.o.store.add(this.o.key(),s);this.o.redrawBase();this.o.changed&&this.o.changed()}}
+if(this.cur){const s=this.cur;this.cur=null;bbox(s);if(s.temp){this.temp.push(s);this.tempLast=performance.now()}else{this.o.store.add(this.o.key(),s);if(this.o.addToBase)this.o.addToBase(s);else this.o.redrawBase();this.clearLive();this.o.changed&&this.o.changed()}}
 if(this.erasing){this.erasing=false;this.o.store.grp=false;this.o.changed&&this.o.changed()}
 this.loop()}
 erase(x,y){const r=(this.ts.eraser.s*3+6)/this.o.scale();const ch=this.o.store.eraseAt(this.o.key(),x,y,r);const nt=[];for(const s of this.temp){const to=splitStroke(s,x,y,r);if(to)nt.push(...to);else nt.push(s)}this.temp=nt;if(ch)this.o.redrawBase()}
-clearTemp(){this.temp=[];this.cur=null;this.render()}
+clearTemp(){this.temp=[];this.cur=null;this.clearLive();this.render()}
 loop(){if(this.raf)return;const f=()=>{this.raf=0;this.render();if(this.temp.length||this.cur||this.erasing)this.raf=requestAnimationFrame(f)};this.raf=requestAnimationFrame(f)}
-render(){const c=this.ctx,cv=this.fx;if(!cv.width)return;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);this.o.applyXf(c);const now=performance.now();
+startLive(){this.clearLive();this.k=1;this.prev=[this.cur.pts[0],this.cur.pts[1]];this.live.style.opacity=this.cur.hl?.38:1}
+clearLive(){const l=this.live;this.lctx.setTransform(1,0,0,1,0,0);this.lctx.clearRect(0,0,l.width,l.height)}
+syncLive(){const l=this.live,f=this.fx;if(l.width!==f.width||l.height!==f.height){l.width=f.width;l.height=f.height}l.style.width=f.style.width;l.style.height=f.style.height}
+liveStep(){const s=this.cur;if(!s||s.temp)return;this.syncLive();const c=this.lctx,p=s.pts,n=p.length/2;let i=this.k;if(i+1>=n)return;
+this.o.applyXf(c);c.lineCap='round';c.lineJoin='round';c.strokeStyle=s.color;c.lineWidth=s.w;c.beginPath();c.moveTo(this.prev[0],this.prev[1]);
+for(;i+1<n;i++){const mx=(p[2*i]+p[2*i+2])/2,my=(p[2*i+1]+p[2*i+3])/2;c.quadraticCurveTo(p[2*i],p[2*i+1],mx,my);this.prev=[mx,my]}this.k=i;c.stroke()}
+render(){const c=this.ctx,cv=this.fx;if(!cv.width)return;this.liveStep();const need=this.temp.length>0||!!(this.cur&&this.cur.temp)||!!(this.hover&&this.tool==='eraser');if(!need&&!this.fxHas)return;this.fxHas=need;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);this.o.applyXf(c);const now=performance.now();
 if(this.cur&&this.cur.temp)this.tempLast=now;
 if(this.temp.length){const age=now-this.tempLast;const a=age>750?1-(age-750)/400:1;if(a<=0)this.temp=[];else this.temp.forEach(s=>drawStroke(c,s,a))}
-if(this.cur)drawStroke(c,this.pred&&this.pred.length?{...this.cur,pts:this.cur.pts.concat(this.pred)}:this.cur,1);
+if(this.cur&&this.cur.temp)drawStroke(c,this.cur,1);
 if(this.hover&&this.tool==='eraser'){c.setTransform(1,0,0,1,0,0);c.beginPath();c.arc(this.hover[0]*DPR,this.hover[1]*DPR,(this.ts.eraser.s*3+6)*DPR,0,6.2832);c.lineWidth=1.5*DPR;c.strokeStyle='rgba(120,120,120,.9)';c.stroke()}}}
 
 /* ---------- shared toolbar ---------- */
@@ -449,7 +455,7 @@ let pdfTS=Object.assign(defTS('#1d4ed8'),LS.get('sh.ts.pdf',{}));
 const pdfInk=new Ink({fx:fcv,ts:pdfTS,tool:'none',store:PDF.store,key:()=>PDF.n,
 toScene:(cx,cy)=>{const r=fcv.getBoundingClientRect();return[(cx-r.left)/PDF.zoom,(cy-r.top)/PDF.zoom]},
 scale:()=>PDF.zoom,applyXf:c=>c.setTransform(DPR*PDF.zoom,0,0,DPR*PDF.zoom,0,0),
-redrawBase:()=>drawAnn(),changed:()=>saveAnnSoon(),saveTS:()=>LS.set('sh.ts.pdf',pdfTS),
+redrawBase:()=>drawAnnReq(),addToBase:s=>{const c=acv.getContext('2d');c.setTransform(DPR*PDF.zoom,0,0,DPR*PDF.zoom,0,0);drawStroke(c,s)},changed:()=>saveAnnSoon(),saveTS:()=>LS.set('sh.ts.pdf',pdfTS),
 onTool:t=>{fcv.style.pointerEvents=t==='none'?'none':'auto'},
 onPan:(dx,dy)=>{stage.scrollLeft-=dx;stage.scrollTop-=dy},onGesture:g=>{stage.scrollLeft-=g.dx;stage.scrollTop-=g.dy}});
 fcv.style.pointerEvents='none';
@@ -459,6 +465,7 @@ const pdfTb=mkTb($('#pdfTb'),pdfInk,{lead:`<button class="tbtn" id="pBack">${ico
 pdfTb.refresh();
 function sizeAll(){const w=PDF.pw*PDF.zoom,h=PDF.ph*PDF.zoom;wrap.style.width=w+'px';wrap.style.height=h+'px';[pcv,acv,fcv].forEach(c=>{c.style.width=w+'px';c.style.height=h+'px'});[acv,fcv].forEach(c=>{const W=Math.round(w*DPR),H=Math.round(h*DPR);if(c.width!==W)c.width=W;if(c.height!==H)c.height=H})}
 function drawAnn(){const c=acv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,acv.width,acv.height);c.setTransform(DPR*PDF.zoom,0,0,DPR*PDF.zoom,0,0);(PDF.store.pages[PDF.n]||[]).forEach(s=>drawStroke(c,s))}
+let annQ=0;function drawAnnReq(){if(annQ)return;annQ=requestAnimationFrame(()=>{annQ=0;drawAnn()})}
 let annT;function saveAnnSoon(){clearTimeout(annT);annT=setTimeout(saveAnn,600)}
 function saveAnn(){if(PDF.id!=null)DB.put('kv',{id:'ann:'+PDF.id,pages:PDF.store.pages})}
 async function loadPdfJs(){if(window.pdfjsLib)return window.pdfjsLib;await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';s.onload=res;s.onerror=()=>rej(new Error('offline'));document.head.appendChild(s)});pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';return pdfjsLib}
@@ -511,7 +518,7 @@ let bdTS=Object.assign(defTS('#111827'),LS.get('sh.ts.board',{}));
 const bdInk=new Ink({fx:bfx,ts:bdTS,tool:'pen',store:BD.store,key:()=>'b',handPan:true,space:()=>spaceDown,
 toScene:(cx,cy)=>{const r=bfx.getBoundingClientRect();return[(cx-r.left)/BD.cam.z+BD.cam.x,(cy-r.top)/BD.cam.z+BD.cam.y]},
 scale:()=>BD.cam.z,applyXf:c=>{const z=BD.cam.z*DPR;c.setTransform(z,0,0,z,-BD.cam.x*z,-BD.cam.y*z)},
-redrawBase:()=>bdReq(),changed:()=>bdSaveSoon(),saveTS:()=>LS.set('sh.ts.board',bdTS),
+redrawBase:()=>bdReq(),addToBase:s=>{const c=bcv.getContext('2d'),k=BD.cam.z*DPR;c.setTransform(k,0,0,k,-BD.cam.x*k,-BD.cam.y*k);drawStroke(c,s)},changed:()=>bdSaveSoon(),saveTS:()=>LS.set('sh.ts.board',bdTS),
 onPan:(dx,dy)=>{BD.cam.x-=dx/BD.cam.z;BD.cam.y-=dy/BD.cam.z;bdReq();bdSaveSoon()},
 onGesture:g=>{const r=bst.getBoundingClientRect();BD.cam.x-=g.dx/BD.cam.z;BD.cam.y-=g.dy/BD.cam.z;bdZoom(g.ratio,g.cx-r.left,g.cy-r.top)}});
 let spaceDown=false;
