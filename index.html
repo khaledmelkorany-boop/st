@@ -150,6 +150,8 @@ h1{font-size:26px;margin:0 0 2px;font-weight:800}
 .bgs button{width:26px;height:26px;border-radius:8px;background:var(--sw);border:2px solid var(--line)}
 .bgs button.on{outline:2px solid var(--brand);outline-offset:2px}
 .tb2 .seg button{padding:5px 11px;font-size:13px}
+.holdwrap{align-items:center;gap:8px;flex:none}
+.lbl{color:var(--muted);font-size:13px;white-space:nowrap}
 /* pdf */
 #lib{padding:20px 16px;max-width:1100px;margin:0 auto;width:100%;overflow:auto;flex:1}
 .drop{border:2px dashed var(--line);border-radius:var(--r);padding:26px;text-align:center;color:var(--muted);margin-bottom:18px;transition:.15s}
@@ -369,6 +371,7 @@ put:wrap((s,v)=>tx(s,'readwrite',st=>st.put(v)),(s,v)=>{if(s==='files'&&!v.id)v.
 del:wrap((s,k)=>tx(s,'readwrite',st=>st.delete(k)),(s,k)=>{mem[s].delete(k)})}})();
 
 /* ---------- drawing engine (shared by PDF + whiteboard) ---------- */
+const hexA=(h,a)=>{const n=parseInt(h.slice(1),16);return`rgba(${n>>16&255},${n>>8&255},${n&255},${a})`};
 function bbox(s){const p=s.pts;let a=1e9,b=1e9,c=-1e9,d=-1e9;for(let i=0;i<p.length;i+=2){if(p[i]<a)a=p[i];if(p[i]>c)c=p[i];if(p[i+1]<b)b=p[i+1];if(p[i+1]>d)d=p[i+1]}const h=s.w/2;s.bb=[a-h,b-h,c+h,d+h]}
 function dseg(px,py,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy;let t=l?((px-ax)*dx+(py-ay)*dy)/l:0;t=Math.max(0,Math.min(1,t));return Math.hypot(px-(ax+t*dx),py-(ay+t*dy))}
 function hitStroke(s,x,y,r){const rr=r+s.w/2;if(s.bb&&(x<s.bb[0]-r||x>s.bb[2]+r||y<s.bb[1]-r||y>s.bb[3]+r))return false;const p=s.pts;if(p.length<4)return Math.hypot(x-p[0],y-p[1])<=rr;for(let i=0;i<p.length-2;i+=2)if(dseg(x,y,p[i],p[i+1],p[i+2],p[i+3])<=rr)return true;return false}
@@ -376,7 +379,7 @@ function strokePath(ctx,s,color,w){const p=s.pts;ctx.strokeStyle=color;ctx.fillS
 if(p.length<4){ctx.beginPath();ctx.arc(p[0],p[1],w/2,0,6.2832);ctx.fill()}
 else{ctx.beginPath();ctx.moveTo(p[0],p[1]);let i=2;for(;i<p.length-2;i+=2)ctx.quadraticCurveTo(p[i],p[i+1],(p[i]+p[i+2])/2,(p[i+1]+p[i+3])/2);ctx.lineTo(p[i],p[i+1]);ctx.stroke()}}
 function drawStroke(ctx,s,al=1){ctx.save();ctx.lineCap='round';ctx.lineJoin='round';ctx.globalAlpha=al*(s.hl?.38:1);
-if(s.temp){const ow=s.ow||1.5,a0=ctx.globalAlpha;ctx.globalAlpha=a0*.25;ctx.translate(0,ow*1.7);strokePath(ctx,s,'#000',s.w+3*ow);ctx.translate(0,-ow*1.7);ctx.globalAlpha=a0;strokePath(ctx,s,'#000',s.w+2*ow);strokePath(ctx,s,'#ff1a1a',s.w)}
+if(s.temp){const a0=ctx.globalAlpha,w=s.w;[[3.4,.10],[2.4,.16],[1.6,.28]].forEach(([k,al])=>{ctx.globalAlpha=a0*al;strokePath(ctx,s,s.color,w*k)});ctx.globalAlpha=a0;strokePath(ctx,s,s.color,w);ctx.globalAlpha=a0*.9;strokePath(ctx,s,'#ffffff',w*.38)}
 else strokePath(ctx,s,s.color,s.w);ctx.restore()}
 function splitStroke(s,x,y,r){if(!hitStroke(s,x,y,r))return null;const rr=r+s.w/2,p=s.pts,step=Math.max(rr*.5,.5),q=[];
 for(let i=0;i<p.length;i+=2){q.push(p[i],p[i+1]);if(i+3<p.length){const dx=p[i+2]-p[i],dy=p[i+3]-p[i+1],n=Math.floor(Math.hypot(dx,dy)/step);for(let j=1;j<=n;j++)q.push(p[i]+dx*j/(n+1),p[i+1]+dy*j/(n+1))}}
@@ -402,13 +405,15 @@ if(o.t==='c'){this.pages[o.k]=[];this.u.push(o);return o.k}
 const a=this.arr(o.k);if(o.t==='a')a.push(o.s);else o.items.forEach(h=>a.splice(h.i,1,...h.to));this.u.push(o);return o.k}
 clearAll(){Object.keys(this.pages).forEach(k=>this.pages[k]=[]);this.u=[];this.r=[]}}
 
+/* خط مستقيم من أول نقطة لآخر نقطة، ولو قريب من الأفقي يتظبط أفقي تمامًا */
+function straightStroke(s){const p=s.pts,n=p.length/2;let ax=p[0],ay=p[1],bx=p[2*n-2],by=p[2*n-1];if(Math.abs(by-ay)<Math.abs(bx-ax)*.18){const m=(ay+by)/2;ay=by=m}s.pts=[ax,ay,bx,by]}
 class Ink{
 constructor(o){this.o=o;this.fx=o.fx;this.ctx=o.fx.getContext('2d');this.ts=o.ts;this.tool=o.tool||'none';this.temp=[];this.tempLast=0;this.cur=null;this.ptrs=new Map();this.gest=null;this.pan=null;this.erasing=false;this.hover=null;this.raf=0;this.fxHas=false;this.k=1;this.prev=[0,0];
 const lv=document.createElement('canvas');lv.className='live';lv.style.pointerEvents='none';o.fx.parentNode.insertBefore(lv,o.fx);this.live=lv;this.lctx=lv.getContext('2d');
 const f=this.fx;f.addEventListener('pointerdown',e=>this.down(e));f.addEventListener('pointermove',e=>this.move(e));
 ['pointerup','pointercancel'].forEach(n=>f.addEventListener(n,e=>this.up(e)));
 f.addEventListener('pointerleave',()=>{if(this.hover){this.hover=null;this.render()}});f.addEventListener('contextmenu',e=>e.preventDefault())}
-setTool(t){this.tool=t;this.cur=null;this.clearLive();this.hover=null;this.o.onTool&&this.o.onTool(t);this.render()}
+setTool(t){this.tool=t;this.cur=null;this.clearLive();this.hover=null;this.fx.style.cursor=t==='temp'?'none':'';this.o.onTool&&this.o.onTool(t);this.render()}
 gi(){const a=[...this.ptrs.values()];const [p,q]=a;return{cx:(p[0]+q[0])/2,cy:(p[1]+q[1])/2,d:Math.hypot(p[0]-q[0],p[1]-q[1])||1}}
 cancel(){this.cur=null;this.clearLive();if(this.erasing){this.erasing=false;this.o.store.grp=false}}
 down(e){const f=this.fx;
@@ -419,21 +424,22 @@ if(this.tool==='none')return;
 e.preventDefault();try{f.setPointerCapture(e.pointerId)}catch{}
 const [x,y]=this.o.toScene(e.clientX,e.clientY),sc=this.o.scale(),t=this.tool,st=this.ts[t];
 if(t==='eraser'){this.erasing=true;this.o.store.grp=false;this.erase(x,y)}
-else{this.cur={color:t==='temp'?'#ff1a1a':st.c,w:st.s*(t==='hl'?3.5:1)/sc,ow:1.6/sc,hl:t==='hl',temp:t==='temp',pts:[x,y]};if(t==='temp')this.tempLast=performance.now();else this.startLive()}
+else{this.cur={color:st.c||'#ff1a1a',w:st.s*(t==='hl'?3.5:1)/sc,hl:t==='hl',temp:t==='temp',pts:[x,y]};if(t==='temp'){this.tempLast=performance.now();const r=f.getBoundingClientRect();this.hover=[e.clientX-r.left,e.clientY-r.top]}else this.startLive()}
 this.loop()}
 move(e){
 if(e.pointerType==='touch'&&this.ptrs.has(e.pointerId))this.ptrs.set(e.pointerId,[e.clientX,e.clientY]);
 if(this.gest){const g=this.gi();this.o.onGesture({dx:g.cx-this.gest.cx,dy:g.cy-this.gest.cy,ratio:g.d/this.gest.d,cx:g.cx,cy:g.cy});this.gest=g;return}
 if(this.pan&&e.pointerId===this.pan[2]){this.o.onPan(e.clientX-this.pan[0],e.clientY-this.pan[1]);this.pan[0]=e.clientX;this.pan[1]=e.clientY;return}
-if(this.tool==='eraser'&&e.pointerType!=='touch'){const r=this.fx.getBoundingClientRect();this.hover=[e.clientX-r.left,e.clientY-r.top]}
+const hv=this.tool==='eraser'?e.pointerType!=='touch':this.tool==='temp'&&(e.pointerType!=='touch'||!!this.cur);
+if(hv){const r=this.fx.getBoundingClientRect();this.hover=[e.clientX-r.left,e.clientY-r.top]}
 if(!this.cur&&!this.erasing){if(this.hover)this.render();return}
 const sc=this.o.scale();let evs=e.getCoalescedEvents?e.getCoalescedEvents():[];if(!evs.length)evs=[e];
 for(const ev of evs){const [x,y]=this.o.toScene(ev.clientX,ev.clientY);if(this.erasing)this.erase(x,y);else{const p=this.cur.pts,n=p.length;if(Math.hypot(x-p[n-2],y-p[n-1])*sc>.8)p.push(x,y)}}
 this.loop()}
-up(e){this.ptrs.delete(e.pointerId);
+up(e){this.ptrs.delete(e.pointerId);if(e.pointerType==='touch'&&this.tool==='temp')this.hover=null;
 if(this.gest){if(this.ptrs.size<2)this.gest=null;return}
 if(this.pan&&e.pointerId===this.pan[2]){this.pan=null;return}
-if(this.cur){const s=this.cur;this.cur=null;bbox(s);if(s.temp){this.temp.push(s);this.tempLast=performance.now()}else{this.o.store.add(this.o.key(),s);if(this.o.addToBase)this.o.addToBase(s);else this.o.redrawBase();this.clearLive();this.o.changed&&this.o.changed()}}
+if(this.cur){const s=this.cur;this.cur=null;if(s.hl&&this.o.shapeHl)this.o.shapeHl(s);bbox(s);if(s.temp){this.temp.push(s);this.tempLast=performance.now()}else{this.o.store.add(this.o.key(),s);if(this.o.addToBase)this.o.addToBase(s);else this.o.redrawBase();this.clearLive();this.o.changed&&this.o.changed()}}
 if(this.erasing){this.erasing=false;this.o.store.grp=false;this.o.changed&&this.o.changed()}
 this.loop()}
 erase(x,y){const r=(this.ts.eraser.s*3+6)/this.o.scale();const ch=this.o.store.eraseAt(this.o.key(),x,y,r);const nt=[];for(const s of this.temp){const to=splitStroke(s,x,y,r);if(to)nt.push(...to);else nt.push(s)}this.temp=nt;if(ch)this.o.redrawBase()}
@@ -444,28 +450,33 @@ startLive(){this.clearLive();this.k=1;this.prev=[this.cur.pts[0],this.cur.pts[1]
 const ref=(this.cur.hl&&this.o.under)||this.fx;ref.parentNode.insertBefore(this.live,ref)}
 clearLive(){const l=this.live;this.lctx.setTransform(1,0,0,1,0,0);this.lctx.clearRect(0,0,l.width,l.height)}
 syncLive(){const l=this.live,f=this.fx;if(l.width!==f.width||l.height!==f.height){l.width=f.width;l.height=f.height}l.style.width=f.style.width;l.style.height=f.style.height}
-liveStep(){const s=this.cur;if(!s||s.temp)return;this.syncLive();const c=this.lctx,p=s.pts,n=p.length/2;let i=this.k;if(i+1>=n)return;
+liveStep(){const s=this.cur;if(!s||s.temp)return;
+if(s.hl&&this.o.shapeHl){const t={...s,pts:s.pts.slice()};this.o.shapeHl(t);this.syncLive();const c=this.lctx;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,this.live.width,this.live.height);this.o.applyXf(c);c.lineCap='round';c.lineJoin='round';c.strokeStyle=t.color;c.lineWidth=t.w;c.beginPath();c.moveTo(t.pts[0],t.pts[1]);c.lineTo(t.pts[2],t.pts[3]);c.stroke();return}
+this.syncLive();const c=this.lctx,p=s.pts,n=p.length/2;let i=this.k;if(i+1>=n)return;
 this.o.applyXf(c);c.lineCap='round';c.lineJoin='round';c.strokeStyle=s.color;c.lineWidth=s.w;c.beginPath();c.moveTo(this.prev[0],this.prev[1]);
 for(;i+1<n;i++){const mx=(p[2*i]+p[2*i+2])/2,my=(p[2*i+1]+p[2*i+3])/2;c.quadraticCurveTo(p[2*i],p[2*i+1],mx,my);this.prev=[mx,my]}this.k=i;c.stroke()}
-render(){const c=this.ctx,cv=this.fx;if(!cv.width)return;this.liveStep();const need=this.temp.length>0||!!(this.cur&&this.cur.temp)||!!(this.hover&&this.tool==='eraser');if(!need&&!this.fxHas)return;this.fxHas=need;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);this.o.applyXf(c);const now=performance.now();
+render(){const c=this.ctx,cv=this.fx;if(!cv.width)return;this.liveStep();const need=this.temp.length>0||!!(this.cur&&this.cur.temp)||!!(this.hover&&(this.tool==='eraser'||this.tool==='temp'));if(!need&&!this.fxHas)return;this.fxHas=need;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);this.o.applyXf(c);const now=performance.now();
 if(this.cur&&this.cur.temp)this.tempLast=now;
-if(this.temp.length){const age=now-this.tempLast;const a=age>750?1-(age-750)/400:1;if(a<=0)this.temp=[];else this.temp.forEach(s=>drawStroke(c,s,a))}
+if(this.temp.length){const age=now-this.tempLast,hold=((this.ts.temp&&this.ts.temp.hold)||2)*1000,t=Math.min(1,Math.max(0,(age-hold)/700)),a=1-t*t*(3-2*t);if(t>=1)this.temp=[];else this.temp.forEach(s=>drawStroke(c,s,a))}
 if(this.cur&&this.cur.temp)drawStroke(c,this.cur,1);
+if(this.hover&&this.tool==='temp'){const st=this.ts.temp,col=st.c||'#ff1a1a',x=this.hover[0]*DPR,y=this.hover[1]*DPR,r=(st.s*2.2+7)*DPR,g=c.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.3,col);g.addColorStop(1,hexA(col,0));c.setTransform(1,0,0,1,0,0);c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,6.2832);c.fill()}
 if(this.hover&&this.tool==='eraser'){c.setTransform(1,0,0,1,0,0);c.beginPath();c.arc(this.hover[0]*DPR,this.hover[1]*DPR,(this.ts.eraser.s*3+6)*DPR,0,6.2832);c.lineWidth=1.5*DPR;c.strokeStyle='rgba(120,120,120,.9)';c.stroke()}}}
 
 /* ---------- shared toolbar ---------- */
 const COLORS=['#111827','#ef4444','#f97316','#facc15','#22c55e','#3b82f6','#8b5cf6','#ec4899','#ffffff'];
+const LASER=['#ff1a1a','#f97316','#22c55e','#3b82f6','#a855f7','#ec4899'];
 const TNAME={none:'يد',pen:'قلم',hl:'هايلايت',eraser:'ممحاة',temp:'قلم مؤقت'};
 const TKEY={none:'Esc',pen:'P',hl:'H',eraser:'E',temp:'T'};
-const defTS=(pc)=>({pen:{c:pc,s:3},hl:{c:'#facc15',s:5},temp:{c:'#ef4444',s:3},eraser:{s:6}});
+const defTS=(pc)=>({pen:{c:pc,s:3},hl:{c:'#facc15',s:5},temp:{c:'#ff1a1a',s:3,hold:2},eraser:{s:6}});
 function mkTb(root,ink,{lead='',trail='',row2=''}={}){
-root.innerHTML=`<div class="tb1">${lead}<div class="tools">${['none','pen','hl','eraser','temp'].map(t=>`<button class="tool" data-tool="${t}" title="${TNAME[t]} (${TKEY[t]})">${icon(t)}<span>${TNAME[t]}</span></button>`).join('')}</div><span class="sp"></span>${trail}</div><div class="tb2"><div class="colors"></div><label class="size"><input type="range" min="1" max="24" value="3"><span class="pv"><i class="dot"></i></span></label><span class="hint">وضع التصفح — اختر أداة للكتابة</span>${row2}</div>`;
-const tb2=$('.tb2',root),cc=$('.colors',root),rg=$('input[type=range]',root),dot=$('.dot',root);
-function refresh(){const t=ink.tool;$$('.tool',root).forEach(b=>b.classList.toggle('on',b.dataset.tool===t));tb2.classList.toggle('idle',t==='none');const ts=ink.ts[t];if(!ts)return;
-cc.style.display=(t==='eraser'||t==='temp')?'none':'';cc.innerHTML=COLORS.map(c=>`<button class="sw ${c===ts.c?'on':''}" data-c="${c}" style="--sw:${c}" title="${c}"></button>`).join('');
+root.innerHTML=`<div class="tb1">${lead}<div class="tools">${['none','pen','hl','eraser','temp'].map(t=>`<button class="tool" data-tool="${t}" title="${TNAME[t]} (${TKEY[t]})">${icon(t)}<span>${TNAME[t]}</span></button>`).join('')}</div><span class="sp"></span>${trail}</div><div class="tb2"><div class="colors"></div><label class="size"><input type="range" min="1" max="24" value="3"><span class="pv"><i class="dot"></i></span></label><div class="holdwrap" style="display:none"><span class="lbl">يختفي بعد</span><div class="seg">${[1,2,5].map(h=>`<button data-h="${h}">${h} ث</button>`).join('')}</div></div><span class="hint">وضع التصفح — اختر أداة للكتابة</span>${row2}</div>`;
+const tb2=$('.tb2',root),hw=$('.holdwrap',root),cc=$('.colors',root),rg=$('input[type=range]',root),dot=$('.dot',root);
+function refresh(){const t=ink.tool;$$('.tool',root).forEach(b=>b.classList.toggle('on',b.dataset.tool===t));tb2.classList.toggle('idle',t==='none');hw.style.display=t==='temp'?'flex':'none';const ts=ink.ts[t];if(!ts)return;if(t==='temp'&&!LASER.includes(ts.c))ts.c='#ff1a1a';$$('button',hw).forEach(b=>b.classList.toggle('on',+b.dataset.h===(ts.hold||2)));dot.style.boxShadow='';
+cc.style.display=(t==='eraser')?'none':'';cc.innerHTML=(t==='temp'?LASER:COLORS).map(c=>`<button class="sw ${c===ts.c?'on':''}" data-c="${c}" style="--sw:${c}" title="${c}"></button>`).join('');
 rg.max=t==='eraser'?30:24;rg.value=ts.s;const d=Math.max(4,Math.min(28,ts.s*(t==='hl'?3.5:1)));dot.style.width=dot.style.height=d+'px';
-if(t==='eraser'){dot.style.background='transparent';dot.style.border='1.5px solid var(--muted)'}else if(t==='temp'){dot.style.background='#ff1a1a';dot.style.border='2px solid #000'}else{dot.style.border='0';dot.style.background=ts.c}}
-root.addEventListener('click',e=>{const b=e.target.closest('.tool');if(b){ink.setTool(ink.tool===b.dataset.tool?'none':b.dataset.tool);refresh();return}
+if(t==='eraser'){dot.style.background='transparent';dot.style.border='1.5px solid var(--muted)'}else if(t==='temp'){dot.style.background=ts.c;dot.style.border='0';dot.style.boxShadow='0 0 8px '+ts.c}else{dot.style.border='0';dot.style.background=ts.c}}
+root.addEventListener('click',e=>{const hb=e.target.closest('[data-h]');if(hb){ink.ts.temp.hold=+hb.dataset.h;ink.o.saveTS();refresh();return}
+const b=e.target.closest('.tool');if(b){ink.setTool(ink.tool===b.dataset.tool?'none':b.dataset.tool);refresh();return}
 const s=e.target.closest('.sw');if(s){ink.ts[ink.tool].c=s.dataset.c;ink.o.saveTS();refresh()}});
 rg.addEventListener('input',()=>{ink.ts[ink.tool].s=+rg.value;ink.o.saveTS();refresh()});
 return{refresh}}
@@ -538,12 +549,12 @@ $('#tmAuto').onchange=e=>{TMS.auto=e.target.checked;LS.set('sh.timer',TMS)};
 ['fs1','fs2'].forEach((id,i)=>{const el=$('#'+id);el.value=i?TMS.fb:TMS.fs;el.onchange=()=>{const v=Math.max(1,Math.min(600,+el.value||1));el.value=v;TMS[i?'fb':'fs']=v;if(TMS.preset==='free'&&!TM.running)applyPreset('free');else LS.set('sh.timer',TMS)}});
 
 /* ---------- PDF module ---------- */
-const PDF={doc:null,id:null,n:1,N:0,zoom:1,pw:612,ph:792,tok:0,fit:'w',rt:null,store:new Store(),rec:null};
+const PDF={doc:null,id:null,n:1,N:0,zoom:1,pw:612,ph:792,tok:0,fit:'w',rt:null,store:new Store(),rec:null,txt:new Map()};
 const PDFS=Object.assign({thumbs:innerWidth>=900},LS.get('sh.pdf.ui',{}));
 const PDFM={};
 const stage=$('#stage'),wrap=$('#pgWrap'),pcv=$('#pdfCv'),acv=$('#annCv'),fcv=$('#fxCv'),hcv=$('#hlCv');
 let pdfTS=Object.assign(defTS('#1d4ed8'),LS.get('sh.ts.pdf',{}));
-const pdfInk=new Ink({fx:fcv,ts:pdfTS,tool:'none',store:PDF.store,key:()=>PDF.n,under:pcv,
+const pdfInk=new Ink({fx:fcv,ts:pdfTS,tool:'none',store:PDF.store,key:()=>PDF.n,under:pcv,shapeHl:s=>pdfShapeHl(s),
 toScene:(cx,cy)=>{const r=fcv.getBoundingClientRect();return[(cx-r.left)/PDF.zoom,(cy-r.top)/PDF.zoom]},
 scale:()=>PDF.zoom,applyXf:c=>c.setTransform(DPR*PDF.zoom,0,0,DPR*PDF.zoom,0,0),
 redrawBase:()=>drawAnnReq(),
@@ -571,8 +582,23 @@ let annT;function saveAnnSoon(){clearTimeout(annT);annT=setTimeout(saveAnn,600)}
 function saveAnn(){if(PDF.id!=null)DB.put('kv',{id:'ann:'+PDF.id,pages:PDF.store.pages})}
 async function loadPdfJs(){if(window.pdfjsLib)return window.pdfjsLib;await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';s.onload=res;s.onerror=()=>rej(new Error('offline'));document.head.appendChild(s)});pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';return pdfjsLib}
 function fitZoom(mode){const aw=(stage.clientWidth-24)/PDF.pw;return Math.max(.3,Math.min(4,mode==='p'?Math.min(aw,(stage.clientHeight-24)/PDF.ph):aw))}
+/* مواضع سطور النص في الصفحة (من pdf.js) عشان الهايلايت يتظبط عليها */
+async function loadText(page,n){if(PDF.txt.has(n))return;PDF.txt.set(n,[]);const doc=PDF.doc;
+try{const tc=await page.getTextContent(),vp=page.getViewport({scale:1}),out=[];
+for(const it of tc.items){if(!it.str||!it.str.trim())continue;const t=it.transform;if(Math.abs(t[1])>.01||Math.abs(t[2])>.01)continue;
+const h=Math.hypot(t[2],t[3])||it.height,w=it.width;if(!w||!h)continue;const[x,yb]=vp.convertToViewportPoint(t[4],t[5]);
+out.push({x1:x,x2:x+w,top:yb-h*.9,bot:yb+h*.3})}
+if(doc===PDF.doc)PDF.txt.set(n,out)}catch{}}
+function pdfShapeHl(s){const p=s.pts,n=p.length/2;let sy=0,mn=1e9,mx=-1e9;
+for(let i=0;i<n;i++){sy+=p[2*i+1];if(p[2*i]<mn)mn=p[2*i];if(p[2*i]>mx)mx=p[2*i]}
+const my=sy/n,items=PDF.txt.get(PDF.n)||[];let best=null,bd=1e9;
+for(const it of items){if(mx<it.x1||mn>it.x2)continue;const h=it.bot-it.top,d=Math.abs(my-(it.top+it.bot)/2);if(d<h*.9&&d<bd){bd=d;best=it}}
+if(!best){straightStroke(s);return}
+const mid=(best.top+best.bot)/2,bh=best.bot-best.top;let top=best.top,bot=best.bot;
+for(const it of items){if(mx<it.x1||mn>it.x2)continue;if(Math.abs((it.top+it.bot)/2-mid)<bh*.4){if(it.top<top)top=it.top;if(it.bot>bot)bot=it.bot}}
+const y=(top+bot)/2;s.pts=[mn,y,mx,y];s.w=bot-top}
 async function showPage(n,keep){if(!PDF.doc)return;n=Math.max(1,Math.min(PDF.N,n|0||1));const my=++PDF.tok;PDF.n=n;$('#pdfBusy').classList.add('on');
-const page=await PDF.doc.getPage(n);if(my!==PDF.tok)return;
+const page=await PDF.doc.getPage(n);if(my!==PDF.tok)return;loadText(page,n);
 const v1=page.getViewport({scale:1});PDF.pw=v1.width;PDF.ph=v1.height;
 if(PDF.fit)PDF.zoom=fitZoom(PDF.fit);
 sizeAll();drawAnn();pdfInk.clearTemp();updNav();
@@ -626,7 +652,7 @@ else if(t('pClr')){if(PDF.store.clearPage(PDF.n)){pdfInk.clearTemp();drawAnn();s
 function doUndo(redo){const st=PDF.store;if(PDF.id==null)return;const k=redo?st.redo():st.undo();if(k==null)return;if(+k!==PDF.n)showPage(+k);else drawAnn();saveAnnSoon();updDots()}
 PDFM.refit=()=>{if(PDF.doc&&PDF.fit&&$('#v-pdf').classList.contains('on'))showPage(PDF.n,true)};
 async function openRec(id){let rec;try{rec=await DB.get('files',id);if(!rec)return;const lib=await loadPdfJs();const buf=await rec.blob.arrayBuffer();PDF.doc=await lib.getDocument({data:buf}).promise}catch(err){toast('تعذر فتح الملف — تأكد من الاتصال بالإنترنت أو إن الملف سليم');return}
-const saved=await DB.get('kv','ann:'+id);PDF.store=new Store(saved&&saved.pages);PDF.id=id;PDF.rec=rec;PDF.N=PDF.doc.numPages;PDF.fit='w';
+const saved=await DB.get('kv','ann:'+id);PDF.store=new Store(saved&&saved.pages);PDF.id=id;PDF.rec=rec;PDF.N=PDF.doc.numPages;PDF.fit='w';PDF.txt=new Map();
 rec.last=Date.now();rec.N=PDF.N;$('#pTitle').textContent=rec.name;$('#lib').style.display='none';$('#viewer').classList.add('on');
 pdfInk.tool='none';fcv.style.pointerEvents='none';pdfTb.refresh();
 buildThumbs();setThumbs(PDFS.thumbs);
@@ -656,7 +682,7 @@ const BD={cam:{x:-30,y:-30,z:1},bg:'white',pat:'grid',store:new Store(),W:0,H:0,
 const BDM={};
 const bcv=$('#bdBase'),bfx=$('#bdFx'),bst=$('#bdStage');
 let bdTS=Object.assign(defTS('#111827'),LS.get('sh.ts.board',{}));
-const bdInk=new Ink({fx:bfx,ts:bdTS,tool:'pen',store:BD.store,key:()=>'b',handPan:true,space:()=>spaceDown,
+const bdInk=new Ink({fx:bfx,ts:bdTS,tool:'pen',store:BD.store,key:()=>'b',handPan:true,shapeHl:straightStroke,space:()=>spaceDown,
 toScene:(cx,cy)=>{const r=bfx.getBoundingClientRect();return[(cx-r.left)/BD.cam.z+BD.cam.x,(cy-r.top)/BD.cam.z+BD.cam.y]},
 scale:()=>BD.cam.z,applyXf:c=>{const z=BD.cam.z*DPR;c.setTransform(z,0,0,z,-BD.cam.x*z,-BD.cam.y*z)},
 redrawBase:()=>bdReq(),addToBase:s=>{if(s.hl){bdReq();return}const c=bcv.getContext('2d'),k=BD.cam.z*DPR;c.setTransform(k,0,0,k,-BD.cam.x*k,-BD.cam.y*k);drawStroke(c,s)},changed:()=>bdSaveSoon(),saveTS:()=>LS.set('sh.ts.board',bdTS),
