@@ -682,7 +682,7 @@ const BD={cam:{x:-30,y:-30,z:1},bg:'white',pat:'grid',store:new Store(),W:0,H:0,
 const BDM={};
 const bcv=$('#bdBase'),bfx=$('#bdFx'),bst=$('#bdStage');
 let bdTS=Object.assign(defTS('#111827'),LS.get('sh.ts.board',{}));
-const bdInk=new Ink({fx:bfx,ts:bdTS,tool:'pen',store:BD.store,key:()=>'b',handPan:true,shapeHl:straightStroke,space:()=>spaceDown,
+const bdInk=new Ink({fx:bfx,ts:bdTS,tool:'pen',store:BD.store,key:()=>'b',handPan:true,space:()=>spaceDown,
 toScene:(cx,cy)=>{const r=bfx.getBoundingClientRect();return[(cx-r.left)/BD.cam.z+BD.cam.x,(cy-r.top)/BD.cam.z+BD.cam.y]},
 scale:()=>BD.cam.z,applyXf:c=>{const z=BD.cam.z*DPR;c.setTransform(z,0,0,z,-BD.cam.x*z,-BD.cam.y*z)},
 redrawBase:()=>bdReq(),addToBase:s=>{if(s.hl){bdReq();return}const c=bcv.getContext('2d'),k=BD.cam.z*DPR;c.setTransform(k,0,0,k,-BD.cam.x*k,-BD.cam.y*k);drawStroke(c,s)},changed:()=>bdSaveSoon(),saveTS:()=>LS.set('sh.ts.board',bdTS),
