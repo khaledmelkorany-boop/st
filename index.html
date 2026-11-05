@@ -11,6 +11,7 @@
 @media(prefers-color-scheme:dark){:root{--bg:#0f111a;--surface:#181b28;--text:#eceefb;--muted:#9aa1b8;--line:#2a2e42;--brand:#7c7cff;--brand2:#a78bfa;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25)}}
 body.focus{--top:0px}
 body.focus .top{display:none}
+body.focus{overflow:hidden}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
 body{font-family:'Cairo',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
@@ -642,7 +643,8 @@ trail:`<button class="tbtn" id="pThumbs" title="الصفحات">${icon('grid')}<
 <button class="tbtn" id="pRedo" title="إعادة (Ctrl+Shift+Z)">${icon('redo')}<span>إعادة</span></button>
 <button class="tbtn" id="pClr" title="مسح كتابة الصفحة دي">${icon('trash')}<span>مسح الصفحة</span></button>
 <button class="tbtn" id="pPng" title="حفظ الصفحة كصورة بالكتابة">${icon('img')}<span>حفظ صورة</span></button>
-<button class="tbtn" id="pFocus" title="وضع التركيز — يخفي الشريط العلوي">${icon('focus')}<span>تركيز</span></button>`});
+<button class="tbtn" id="pFocus" title="وضع التركيز — يخفي الشريط العلوي">${icon('focus')}<span>تركيز</span></button>
+<button class="tbtn" id="pFs" title="ملء الشاشة">${icon('fs')}<span>ملء الشاشة</span></button>`});
 pdfTb.refresh();
 function sizeAll(){const w=PDF.pw*PDF.zoom,h=PDF.ph*PDF.zoom;wrap.style.width=w+'px';wrap.style.height=h+'px';[pcv,hcv,acv,fcv].forEach(c=>{c.style.width=w+'px';c.style.height=h+'px'});[hcv,acv,fcv].forEach(c=>{const W=Math.round(w*DPR),H=Math.round(h*DPR);if(c.width!==W)c.width=W;if(c.height!==H)c.height=H})}
 function drawAnn(){const c=acv.getContext('2d'),h=hcv.getContext('2d');[c,h].forEach(x=>{x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,acv.width,acv.height);x.setTransform(DPR*PDF.zoom,0,0,DPR*PDF.zoom,0,0)});(PDF.store.pages[PDF.n]||[]).forEach(s=>drawStroke(s.hl?h:c,s))}
@@ -650,7 +652,7 @@ let annQ=0;function drawAnnReq(){if(annQ)return;annQ=requestAnimationFrame(()=>{
 let annT;function saveAnnSoon(){clearTimeout(annT);annT=setTimeout(saveAnn,600)}
 function saveAnn(){if(PDF.id!=null)DB.put('kv',{id:'ann:'+PDF.id,pages:PDF.store.pages})}
 async function loadPdfJs(){if(window.pdfjsLib)return window.pdfjsLib;await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';s.onload=res;s.onerror=()=>rej(new Error('offline'));document.head.appendChild(s)});pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';return pdfjsLib}
-function fitZoom(mode){const aw=(stage.clientWidth-24)/PDF.pw;return Math.max(.3,Math.min(4,mode==='p'?Math.min(aw,(stage.clientHeight-24)/PDF.ph):aw))}
+function fitZoom(mode){if(mode==='a')mode=innerWidth>innerHeight?'p':'w';const aw=(stage.clientWidth-26)/PDF.pw;const z=mode==='p'?Math.min(aw,(stage.clientHeight-28)/PDF.ph):aw;return Math.floor(Math.max(.3,Math.min(4,z))*1000)/1000}
 /* مواضع سطور النص في الصفحة (من pdf.js) عشان الهايلايت يتظبط عليها */
 async function loadText(page,n){if(PDF.txt.has(n))return;PDF.txt.set(n,[]);const doc=PDF.doc;
 try{const tc=await page.getTextContent(),vp=page.getViewport({scale:1}),out=[];
@@ -685,7 +687,8 @@ function markThumb(){const box=$('#thumbs');if(!box.classList.contains('on'))ret
 function updDots(){$$('#thumbs .th').forEach(d=>d.classList.toggle('has',!!(PDF.store.pages[d.dataset.p]||[]).length))}
 function updNav(){$('#pNum').value=PDF.n;$('#pTot').textContent='/ '+PDF.N;$('#zLbl').textContent=Math.round(PDF.zoom*100)+'%';
 $('#pgProg i').style.width=(PDF.N?PDF.n/PDF.N*100:0)+'%';$('#pPrev').disabled=PDF.n<=1;$('#pNext').disabled=PDF.n>=PDF.N;
-$('#zFit').classList.toggle('on',PDF.fit==='w');$('#zFitP').classList.toggle('on',PDF.fit==='p');markThumb()}
+const ef=PDF.fit==='a'?(innerWidth>innerHeight?'p':'w'):PDF.fit;$('#zFit').classList.toggle('on',ef==='w');$('#zFitP').classList.toggle('on',ef==='p');
+stage.style.overflow=ef==='p'?'hidden':'auto';markThumb()}
 let zT;function zoomTo(z,fit,ax,ay){const old=PDF.zoom;PDF.fit=fit||false;
 if(fit)PDF.zoom=fitZoom(fit);else PDF.zoom=Math.max(.3,Math.min(4,z));
 sizeAll();drawAnn();updNav();
@@ -717,12 +720,13 @@ o.toBlob(b=>{if(!b)return;const a=document.createElement('a');a.href=URL.createO
 $('#pdfTb').addEventListener('click',e=>{const t=id=>e.target.closest('#'+id);
 if(t('pBack'))closePdf();else if(t('pUndo'))doUndo(false);else if(t('pRedo'))doUndo(true);
 else if(t('pThumbs'))setThumbs(!PDFS.thumbs);else if(t('pFocus'))setFocus(!document.body.classList.contains('focus'));else if(t('pPng'))savePng();
+else if(t('pFs'))$('#fsBtn').click();
 else if(t('pClr')){if(PDF.store.clearPage(PDF.n)){pdfInk.clearTemp();drawAnn();saveAnnSoon();updDots();toast('اتمسحت كتابة الصفحة — تقدر تتراجع')}else toast('مفيش كتابة على الصفحة دي')}});
 function doUndo(redo){const st=PDF.store;if(PDF.id==null)return;const k=redo?st.redo():st.undo();if(k==null)return;if(+k!==PDF.n)showPage(+k);else drawAnn();saveAnnSoon();updDots()}
 PDFM.refit=()=>{if(PDF.doc&&PDF.fit&&$('#v-pdf').classList.contains('on'))showPage(PDF.n,true)};
 async function openRec(id){let rec;try{rec=await DB.get('files',id);if(!rec)return;const lib=await loadPdfJs();const buf=await rec.blob.arrayBuffer();PDF.doc=await lib.getDocument({data:buf}).promise}catch(err){toast('تعذر فتح الملف — تأكد من الاتصال بالإنترنت أو إن الملف سليم');return}
-const saved=await DB.get('kv','ann:'+id);PDF.store=new Store(saved&&saved.pages);PDF.id=id;PDF.rec=rec;PDF.N=PDF.doc.numPages;PDF.fit='w';PDF.txt=new Map();
-rec.last=Date.now();rec.N=PDF.N;$('#pTitle').textContent=rec.name;$('#lib').style.display='none';$('#viewer').classList.add('on');
+const saved=await DB.get('kv','ann:'+id);PDF.store=new Store(saved&&saved.pages);PDF.id=id;PDF.rec=rec;PDF.N=PDF.doc.numPages;PDF.fit='a';PDF.txt=new Map();
+rec.last=Date.now();rec.N=PDF.N;$('#pTitle').textContent=rec.name;$('#lib').style.display='none';$('#viewer').classList.add('on');setFocus(true);
 pdfInk.tool='none';fcv.style.pointerEvents='none';pdfTb.refresh();
 buildThumbs();setThumbs(PDFS.thumbs);
 await showPage(Math.min(rec.page||1,PDF.N));DB.put('files',rec)}
