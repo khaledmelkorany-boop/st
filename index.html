@@ -212,6 +212,51 @@ h1{font-size:26px;margin:0 0 2px;font-weight:800}
 .bdhint{position:absolute;bottom:20px;right:16px;max-width:300px;font-size:12.5px;padding:8px 12px;border-radius:10px;background:rgba(0,0,0,.6);color:#fff;transition:opacity .6s;pointer-events:none;direction:rtl;z-index:6}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;padding:10px 18px;border-radius:12px;opacity:0;transition:.25s;pointer-events:none;z-index:99;font-size:14px;max-width:90vw}
 #toast.on{opacity:1;transform:translateX(-50%)}
+/* languages */
+.en{direction:ltr;unicode-bidi:isolate}
+.lgbox{padding:18px;display:flex;flex-direction:column;gap:14px}
+.lgsearch{display:flex;gap:8px}
+.lgsearch input{flex:1;min-width:0;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--bg);font-size:18px}
+.lgsearch input:focus{outline:2px solid var(--brand);border-color:transparent}
+.lgsearch .btn.pri{padding:0 26px;font-size:16px}
+.lgopts{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center}
+.lgopt{display:flex;align-items:center;gap:8px}
+.lgrec{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.lgrec:empty{display:none}
+.chip{padding:5px 13px;border-radius:99px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14px}
+button.chip:hover{border-color:var(--brand);color:var(--brand)}
+.chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.lgres{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.lghead{padding:20px;display:flex;flex-direction:column;gap:10px;border-top:5px solid #db2777}
+.lgdir{font-size:12px;font-weight:700;color:var(--muted)}
+.lgword{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.lgword h2{margin:0;font-size:34px;font-weight:800;line-height:1.2}
+.lgph{color:var(--muted);font-size:16px;direction:ltr}
+.lgtr{display:flex;align-items:center;gap:10px;font-size:26px;font-weight:800;color:var(--brand)}
+.lgalts{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.spk{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand);transition:.15s}
+.spk:hover{background:color-mix(in srgb,var(--brand) 26%,transparent)}
+.spk.sm{width:30px;height:30px}
+.spk.sm svg{width:16px;height:16px}
+.spk.on{background:var(--brand);color:#fff}
+.lgsec{padding:18px;display:flex;flex-direction:column;gap:14px}
+.lgsec h3{margin:0;font-size:18px}
+.lgsec h3 small{color:var(--muted);font-weight:600}
+.lgpos{display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px dashed var(--line)}
+.lgpos:first-of-type{border-top:0;padding-top:0}
+.pos{align-self:flex-start;font-size:12.5px;font-weight:700;padding:2px 10px;border-radius:99px;background:color-mix(in srgb,var(--brand2) 14%,transparent);color:var(--brand2)}
+.defs{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;text-align:left}
+.defs .ex{color:var(--muted);font-size:14px;margin-top:2px;display:flex;align-items:center;gap:8px}
+.syn{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.dgrp{display:flex;flex-direction:column;gap:8px}
+.dgt{font-weight:800;font-size:14px;color:var(--muted)}
+.dlist{display:flex;flex-wrap:wrap;gap:8px}
+.dchip{padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--bg);min-width:128px;display:flex;flex-direction:column;gap:2px}
+.dtop{display:flex;align-items:center;gap:6px;justify-content:space-between}
+.dw{font-weight:700;font-size:15.5px}
+.dw:hover{color:var(--brand)}
+.dtr{color:var(--brand);font-size:13.5px;font-weight:600;min-height:20px}
+@media(max-width:560px){.lgword h2{font-size:28px}.dchip{min-width:calc(50% - 4px);flex:1}}
 </style>
 </head>
 <body>
@@ -223,6 +268,7 @@ h1{font-size:26px;margin:0 0 2px;font-weight:800}
     <button data-go="timer"><svg data-i="timer"></svg><span>المؤقت</span></button>
     <button data-go="pdf"><svg data-i="pdf"></svg><span>عارض PDF</span></button>
     <button data-go="board"><svg data-i="board"></svg><span>السبورة</span></button>
+    <button data-go="lang"><svg data-i="lang"></svg><span>اللغات</span></button>
   </nav>
   <button class="iconbtn" id="fsBtn" title="ملء الشاشة"><svg data-i="fs"></svg></button>
 </header>
@@ -247,6 +293,10 @@ h1{font-size:26px;margin:0 0 2px;font-weight:800}
     <button class="card hcard" data-go="board" style="--g:linear-gradient(135deg,#0891b2,#06b6d4)">
       <div class="ic"><svg data-i="board"></svg></div><h3>السبورة</h3>
       <p>ورقة كبيرة بلا حدود، بمربعات أو خطوط أو سادة</p>
+    </button>
+    <button class="card hcard" data-go="lang" style="--g:linear-gradient(135deg,#db2777,#f472b6)">
+      <div class="ic"><svg data-i="lang"></svg></div><h3>اللغات</h3>
+      <p>قاموس عربي ⇄ إنجليزي بالنطق ومشتقات الكلمة</p>
     </button>
   </div>
 </section>
@@ -324,6 +374,23 @@ h1{font-size:26px;margin:0 0 2px;font-weight:800}
     <div class="bdhint" id="bdHint">مساحة بلا نهاية: تنقّل بإصبعين أو عجلة الماوس أو Space + سحب. زر اليد لوضع التحريك بإصبع واحد.</div>
   </div>
 </section>
+
+<!-- LANGUAGES -->
+<section class="view" id="v-lang">
+  <h1>اللغات</h1><p class="sub">اكتب أي كلمة بالعربي أو الإنجليزي — هتطلع الترجمة والمعاني ومشتقات الكلمة، وتسمع نطقها.</p>
+  <div class="card lgbox">
+    <form class="lgsearch" id="lgForm">
+      <input id="lgQ" dir="auto" placeholder="اكتب كلمة بالعربي أو الإنجليزي…" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="60">
+      <button class="btn pri">بحث</button>
+    </form>
+    <div class="lgopts">
+      <div class="lgopt"><span class="lbl">سرعة النطق</span><div class="seg" id="lgSpeed"><button data-s="slow">بطيء</button><button data-s="fast">سريع</button></div></div>
+      <div class="lgopt"><span class="lbl">اللهجة</span><div class="seg" id="lgAcc"><button data-a="us">أمريكي</button><button data-a="uk">بريطاني</button></div></div>
+    </div>
+    <div class="lgrec" id="lgRec"></div>
+  </div>
+  <div class="lgres" id="lgOut"></div>
+</section>
 <div id="toast"></div>
 
 <script>
@@ -338,6 +405,8 @@ tasks:'<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V
 timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
 pdf:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/>',
 board:'<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>',
+lang:'<path d="M4 5h8M8 3v2M5 5c0 4 3 7 6 8M11 5c0 3-3 7-7 9"/><path d="m13 21 4-9 4 9M14.5 18h5"/>',
+speaker:'<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/>',
 pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
 hl:'<path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>',
 eraser:'<path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/>',
@@ -482,11 +551,11 @@ rg.addEventListener('input',()=>{ink.ts[ink.tool].s=+rg.value;ink.o.saveTS();ref
 return{refresh}}
 
 /* ---------- navigation ---------- */
-const VIEWS=['home','tasks','timer','pdf','board'];
+const VIEWS=['home','tasks','timer','pdf','board','lang'];
 function setFocus(on){document.body.classList.toggle('focus',!!on);const b=$('#pFocus');if(b)b.classList.toggle('on',!!on);setTimeout(()=>{BDM.resize();PDFM.refit()},120)}
-function go(v){if(!VIEWS.includes(v))v='home';if(v!=='pdf'&&document.body.classList.contains('focus'))setFocus(false);VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));$$('nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
+function go(v){if(!VIEWS.includes(v))v='home';if(v!=='pdf'&&document.body.classList.contains('focus'))setFocus(false);if(v!=='lang'&&window.speechSynthesis)speechSynthesis.cancel();VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));$$('nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
 try{history.replaceState(null,'','#'+v)}catch{}
-if(v==='home')renderHome();if(v==='pdf')PDFM.enter();if(v==='board')BDM.enter();window.scrollTo(0,0)}
+if(v==='home')renderHome();if(v==='pdf')PDFM.enter();if(v==='board')BDM.enter();if(v==='lang'&&matchMedia('(hover:hover)').matches)setTimeout(()=>$('#lgQ').focus(),60);window.scrollTo(0,0)}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});
 $('#fsBtn').onclick=async()=>{const d=document,el=d.documentElement,inFs=d.fullscreenElement||d.webkitFullscreenElement;
 const fail=()=>toast('ملء الشاشة مش متاح هنا. افتح الملف في تبويب مستقل في المتصفح وجرّب تاني.');
@@ -739,6 +808,123 @@ setTimeout(()=>{$('#bdHint').style.opacity=0},7000)};
 addEventListener('resize',()=>{BDM.resize();clearTimeout(zT);zT=setTimeout(PDFM.refit,150)});
 addEventListener('beforeunload',()=>{saveAnn()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveAnn()});
+
+/* ---------- languages: dictionary + derivatives + pronunciation ---------- */
+const LGS=Object.assign({speed:'fast',acc:'us',recent:[]},LS.get('sh.lang',{}));
+const saveLG=()=>LS.set('sh.lang',LGS);
+const LGC=LS.get('sh.lang.cache',{});let lgCT;
+function lgCacheSet(k,v){LGC[k]=v;const ks=Object.keys(LGC);if(ks.length>400)delete LGC[ks[0]];clearTimeout(lgCT);lgCT=setTimeout(()=>LS.set('sh.lang.cache',LGC),800)}
+const isAr=s=>/[\u0600-\u06FF]/.test(s);
+const stripAr=s=>s.replace(/[\u064B-\u0652\u0640]/g,'');
+const jget=async u=>{const r=await fetch(u);if(!r.ok)throw new Error('http');return r.json()};
+let lgTok=0,lgLast=null;
+
+/* الترجمة (MyMemory) — بترجّع أفضل ترجمة + بدائل */
+async function mm(text,from,to){const k=from+to+':'+text.toLowerCase();if(LGC[k])return LGC[k];
+const j=await jget('https://api.mymemory.translated.net/get?q='+encodeURIComponent(text)+'&langpair='+from+'|'+to);
+const main=(j.responseData&&j.responseData.translatedText)||'';
+if(/MYMEMORY|INVALID|QUERY LENGTH/i.test(main)||+j.responseStatus===429)throw new Error('limit');
+const wantAr=to==='ar',seen=new Set(),alts=[];
+const ok=t=>t&&t.split(/\s+/).length<=3&&t.length<=32&&(wantAr?isAr(t):/^[a-z' -]+$/i.test(t));
+const push=t=>{t=wantAr?stripAr(String(t||'')):String(t||'').toLowerCase();t=t.replace(/[.!؟?،,]+$/,'').trim();if(ok(t)&&!seen.has(t)){seen.add(t);alts.push(t)}};
+push(main);(j.matches||[]).slice().sort((a,b)=>(+b.match||0)-(+a.match||0)).forEach(m=>push(m.translation));
+const v={main:alts[0]||'',alts:alts.slice(0,6)};if(v.main)lgCacheSet(k,v);return v}
+
+/* التعريفات والنطق الكتابي (dictionaryapi.dev) */
+async function dict(w){try{const j=await jget('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(w));const e=j[0];let ph='';
+(e.phonetics||[]).forEach(p=>{if(!ph&&p.text)ph=p.text});ph=ph||e.phonetic||'';
+const ms=(e.meanings||[]).map(m=>({pos:m.partOfSpeech,defs:(m.definitions||[]).slice(0,3).map(d=>({d:d.definition,ex:d.example||''})),syn:(m.synonyms||[]).slice(0,6)}));
+return{ph,ms}}catch{return null}}
+
+/* المشتقات: كلمات تبدأ بنفس الجذر وتنتهي بلاحقة معروفة، أو بادئة + الكلمة (Datamuse) */
+const SUF=new Set('s es ed d ing ings er ers or ors ion ions ation ations ition itions ive ively ivity ness nesses ity ities ment ments able ably ible ibly ful fully less lessly ly al ally ial ic ical ically ous ously ish ist ists ism ize ized izes izing ise ised ises ising ify ified ifies ifying ent ence ency ant ance ancy ies ied ier iest iness ily ator ators ate ated ates ating e y'.split(' '));
+const PREF=new Set('un re dis in im il ir mis over under pre non anti de out sub inter super self co counter fore mid semi up'.split(' '));
+function lgRoots(w){const r=new Set([w]);
+const m=w.match(/^(.{4,}?)(ization|isation|ations?|itions?|ments?|ness|fully|ful|lessly|less|ings?|ers?|ors?|ively|ive|ity|ously|ous|ally|ly|ical|ic|al|ion|ied|ies|ed|es|s|y|e)$/);
+const b=m?m[1]:w;r.add(b);if(/(.)\1$/.test(b))r.add(b.slice(0,-1));if(b.endsWith('i'))r.add(b.slice(0,-1));
+if(/[ey]$/.test(w))r.add(w.slice(0,-1));
+return[...r].filter(x=>x.length>=3)}
+function sufOk(rem){if(SUF.has(rem))return true;for(let i=3;i<rem.length-1;i++){const a=rem.slice(0,i),b=rem.slice(i);if(SUF.has(a)&&SUF.has(b)&&a.length>2&&b.length>=2)return true}return false}
+async function lgDerivs(w){const roots=lgRoots(w);
+const reqs=roots.map(r=>jget('https://api.datamuse.com/words?sp='+r+'*&max=300&md=p').catch(()=>[]));
+reqs.push(jget('https://api.datamuse.com/words?sp=*'+w+'&max=120&md=p').catch(()=>[]));
+const res=await Promise.all(reqs),pre=res.pop(),out=new Map();
+const tag=o=>(o.tags&&o.tags[0])||'u';
+res.forEach((list,i)=>{const r=roots[i];list.forEach(o=>{const x=o.word;if(x===w||out.has(x)||!/^[a-z]+$/.test(x)||!x.startsWith(r))return;
+let rem=x.slice(r.length);if(!rem)return;let ok=sufOk(rem);
+if(!ok&&rem[0]===r.slice(-1)&&sufOk(rem.slice(1)))ok=true;
+if(ok&&(rem==='e'||rem==='y')&&r===w)ok=false;
+if(ok)out.set(x,tag(o))})});
+pre.forEach(o=>{const x=o.word;if(x===w||out.has(x)||!/^[a-z]+$/.test(x)||!x.endsWith(w))return;if(PREF.has(x.slice(0,x.length-w.length)))out.set(x,tag(o))});
+return[...out].slice(0,60).map(([word,tag])=>({word,tag}))}
+
+/* النطق (Web Speech) + سرعة بطيء/سريع */
+let VOX=[];const loadV=()=>{VOX=speechSynthesis.getVoices()||[]};
+if('speechSynthesis' in window){loadV();speechSynthesis.addEventListener('voiceschanged',loadV)}
+function pickVoice(l){const L=l.toLowerCase().replace('_','-'),p=L.split('-')[0];const n=v=>v.lang.toLowerCase().replace('_','-');return VOX.find(v=>n(v)===L)||VOX.find(v=>n(v).startsWith(p))||null}
+function speak(text,lang,btn){if(!('speechSynthesis' in window)){toast('المتصفح دا مش بيدعم النطق');return}
+const l=lang==='ar'?'ar-SA':(LGS.acc==='uk'?'en-GB':'en-US'),v=pickVoice(l);
+if(lang==='ar'&&!v&&VOX.length)toast('جهازك مفيهوش صوت عربي — ضيفه من إعدادات اللغة والصوت في الجهاز');
+speechSynthesis.cancel();$$('.spk.on').forEach(b=>b.classList.remove('on'));
+const u=new SpeechSynthesisUtterance(text);u.lang=v?v.lang:l;if(v)u.voice=v;u.rate=LGS.speed==='slow'?.55:1.15;
+if(btn){btn.classList.add('on');u.onend=u.onerror=()=>btn.classList.remove('on')}
+lgLast={text,lang};setTimeout(()=>speechSynthesis.speak(u),40)}
+
+/* العرض */
+const POSAR={noun:'اسم',verb:'فعل',adjective:'صفة',adverb:'ظرف',pronoun:'ضمير',preposition:'حرف جر',conjunction:'حرف عطف',interjection:'تعجب',exclamation:'تعجب'};
+const GRP=[['n','أسماء'],['v','أفعال'],['adj','صفات'],['adv','ظروف'],['u','أخرى']];
+const spk=(t,l,c='')=>`<button class="spk ${c}" data-say="${esc(t)}" data-lang="${l}" title="نطق" aria-label="نطق">${icon('speaker')}</button>`;
+function meaningsHtml(d){return d.ms.map(m=>`<div class="lgpos"><span class="pos">${esc(m.pos)}${POSAR[m.pos]?' · '+POSAR[m.pos]:''}</span><ol class="defs en">${m.defs.map(x=>`<li>${esc(x.d)}${x.ex?`<div class="ex"><span>“${esc(x.ex)}”</span>${spk(x.ex,'en','sm')}</div>`:''}</li>`).join('')}</ol>${m.syn.length?`<div class="syn"><span class="lbl">مرادفات:</span>${m.syn.map(s=>`<button class="chip en" data-q="${esc(s)}">${esc(s)}</button>`).join('')}</div>`:''}</div>`).join('')}
+function derivHtml(list){if(!list.length)return'';
+const g=GRP.map(([t,n])=>[n,list.filter(x=>(['n','v','adj','adv'].includes(x.tag)?x.tag:'u')===t)]).filter(a=>a[1].length);
+return`<div class="card lgsec"><h3>مشتقات الكلمة <small>(${list.length})</small></h3>${g.map(([n,a])=>`<div class="dgrp"><div class="dgt">${n}</div><div class="dlist">${a.map(x=>`<div class="dchip" data-w="${x.word}"><div class="dtop"><button class="dw en" data-q="${x.word}">${x.word}</button>${spk(x.word,'en','sm')}</div><small class="dtr"></small></div>`).join('')}</div></div>`).join('')}</div>`}
+async function fillTr(my){const els=$$('#lgOut .dchip');let i=0;
+const run=async()=>{while(i<els.length&&my===lgTok){const el=els[i++];try{const t=await mm(el.dataset.w,'en','ar');if(my===lgTok&&t.main)$('.dtr',el).textContent=t.main}catch(e){if(e.message==='limit')return}}};
+await Promise.all([run(),run(),run()])}
+const lgEmpty=m=>`<div class="emp">${m}</div>`;
+function lgIntro(){const ex=['education','happy','create','success','مدرسة','نجاح','كتاب'];
+$('#lgOut').innerHTML=`<div class="emp">اكتب كلمة وهتظهر ترجمتها ومعانيها ومشتقاتها.<div class="lgrec" style="justify-content:center;margin-top:12px">${ex.map(x=>`<button class="chip ${isAr(x)?'':'en'}" data-q="${x}">${x}</button>`).join('')}</div></div>`}
+
+async function showEn(w,my){const out=$('#lgOut'),one=/^[a-z]+$/.test(w);
+const [t,d,dv]=await Promise.all([mm(w,'en','ar').catch(e=>{if(e.message==='limit')throw e;return{main:'',alts:[]}}),one?dict(w):null,one?lgDerivs(w):[]]);
+if(my!==lgTok)return;
+if(!t.main&&!d&&!dv.length){out.innerHTML=lgEmpty('مالقيتش الكلمة دي. راجع الإملاء أو جرّب كلمة تانية.');return}
+out.innerHTML=`<div class="card lghead"><div class="lgdir">إنجليزي ← عربي</div><div class="lgword"><h2 class="en">${esc(w)}</h2>${spk(w,'en')}${d&&d.ph?`<span class="lgph en">${esc(d.ph)}</span>`:''}</div>
+${t.main?`<div class="lgtr"><span>${esc(t.main)}</span>${spk(t.main,'ar','sm')}</div>`:''}
+${t.alts.length>1?`<div class="lgalts"><span class="lbl">معاني تانية:</span>${t.alts.slice(1).map(a=>`<span class="chip">${esc(a)}</span>`).join('')}</div>`:''}</div>
+${d&&d.ms.length?`<div class="card lgsec">${meaningsHtml(d)}</div>`:''}${derivHtml(dv)}`;
+fillTr(my)}
+
+async function showDetails(w,my){const det=$('#lgDet'),one=/^[a-z]+$/.test(w);
+const [d,dv]=await Promise.all([one?dict(w):null,one?lgDerivs(w):[]]);if(my!==lgTok||!det)return;
+let h='';
+if(d&&d.ms.length)h+=`<div class="card lgsec"><div class="lgword"><h3 class="en" style="margin:0;font-size:24px">${esc(w)}</h3>${spk(w,'en','sm')}${d.ph?`<span class="lgph en">${esc(d.ph)}</span>`:''}</div>${meaningsHtml(d)}</div>`;
+else h+=`<div class="card lgsec"><div class="lgword"><h3 class="en" style="margin:0;font-size:24px">${esc(w)}</h3>${spk(w,'en','sm')}</div></div>`;
+h+=derivHtml(dv);det.innerHTML=h;fillTr(my)}
+
+async function showAr(q,t,my){const out=$('#lgOut'),pick=t.main;
+const chips=p=>t.alts.map(a=>`<button class="chip en ${a===p?'on':''}" data-pick="${esc(a)}">${esc(a)}</button>`).join('');
+out.innerHTML=`<div class="card lghead"><div class="lgdir">عربي ← إنجليزي</div><div class="lgword"><h2>${esc(q)}</h2>${spk(q,'ar')}</div><div class="lgalts"><span class="lbl">الترجمات:</span>${chips(pick)}</div></div><div id="lgDet">${lgEmpty('جارٍ التحميل…')}</div>`;
+await showDetails(pick,my)}
+
+async function lgSearch(raw){const q=stripAr(String(raw||'')).replace(/\s+/g,' ').trim();if(!q)return;const my=++lgTok,out=$('#lgOut');
+$('#lgQ').value=q;addRecent(q);out.innerHTML=lgEmpty('جارٍ البحث…');
+try{if(isAr(q)){const t=await mm(q,'ar','en');if(my!==lgTok)return;if(!t.main){out.innerHTML=lgEmpty('مالقيتش ترجمة للكلمة دي. جرّب كلمة واحدة وبدون أخطاء إملائية.');return}await showAr(q,t,my)}
+else await showEn(q.toLowerCase(),my)}
+catch(e){if(my===lgTok)out.innerHTML=lgEmpty(e.message==='limit'?'وصلت للحد المجاني للترجمة مؤقتاً، جرّب بعد شوية.':'تعذر الاتصال. تأكد من الإنترنت وجرّب تاني.')}}
+
+function addRecent(q){LGS.recent=[q,...LGS.recent.filter(x=>x!==q)].slice(0,12);saveLG();renderRecent()}
+function renderRecent(){const r=LGS.recent;$('#lgRec').innerHTML=r.length?`<span class="lbl">آخر بحث:</span>${r.map(x=>`<button class="chip ${isAr(x)?'':'en'}" data-q="${esc(x)}">${esc(x)}</button>`).join('')}<button class="link" data-rclr>مسح</button>`:''}
+function lgUI(){$$('#lgSpeed button').forEach(b=>b.classList.toggle('on',b.dataset.s===LGS.speed));$$('#lgAcc button').forEach(b=>b.classList.toggle('on',b.dataset.a===LGS.acc))}
+$('#lgForm').onsubmit=e=>{e.preventDefault();lgSearch($('#lgQ').value)};
+$('#lgSpeed').onclick=e=>{const b=e.target.closest('button');if(!b)return;LGS.speed=b.dataset.s;saveLG();lgUI();if(lgLast)speak(lgLast.text,lgLast.lang)};
+$('#lgAcc').onclick=e=>{const b=e.target.closest('button');if(!b)return;LGS.acc=b.dataset.a;saveLG();lgUI();if(lgLast&&lgLast.lang==='en')speak(lgLast.text,'en')};
+$('#v-lang').addEventListener('click',e=>{let b;
+if(b=e.target.closest('[data-say]')){speak(b.dataset.say,b.dataset.lang,b);return}
+if(b=e.target.closest('[data-pick]')){const my=++lgTok;$$('[data-pick]').forEach(c=>c.classList.toggle('on',c===b));$('#lgDet').innerHTML=lgEmpty('جارٍ التحميل…');showDetails(b.dataset.pick,my);return}
+if(b=e.target.closest('[data-q]')){lgSearch(b.dataset.q);window.scrollTo({top:0,behavior:'smooth'});return}
+if(e.target.closest('[data-rclr]')){LGS.recent=[];saveLG();renderRecent()}});
+lgUI();renderRecent();lgIntro();
 
 /* ---------- home ---------- */
 function renderHome(){const h=new Date().getHours();$('#hello').textContent=(h<5?'سهرة موفقة':h<12?'صباح الخير':h<18?'نهارك سعيد':'مساء الخير')+' 👋';
