@@ -156,8 +156,8 @@ h1{font-size:26px;margin:0 0 2px;font-weight:800}
 .holdwrap{align-items:center;gap:8px;flex:none}
 .lbl{color:var(--muted);font-size:13px;white-space:nowrap}
 /* pdf */
-#v-pdf{--stg:#e9ebf1;--glass:color-mix(in srgb,var(--surface) 88%,transparent);--pop:0 12px 34px rgba(12,16,44,.22),0 2px 6px rgba(12,16,44,.10)}
-@media(prefers-color-scheme:dark){#v-pdf{--stg:#161924;--pop:0 12px 34px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.4)}}
+#v-pdf,#v-board{--stg:#e9ebf1;--glass:color-mix(in srgb,var(--surface) 88%,transparent);--pop:0 12px 34px rgba(12,16,44,.22),0 2px 6px rgba(12,16,44,.10)}
+@media(prefers-color-scheme:dark){#v-pdf,#v-board{--stg:#161924;--pop:0 12px 34px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.4)}}
 [hidden]{display:none!important}
 #lib{padding:26px 16px 44px;max-width:1100px;margin:0 auto;width:100%;overflow:auto;flex:1}
 .lhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
@@ -266,14 +266,32 @@ h1{font-size:26px;margin:0 0 2px;font-weight:800}
 .pt.has u{display:block}
 @media(max-width:700px){#thumbs{position:absolute;left:0;top:0;bottom:0;z-index:12;box-shadow:var(--pop)}}
 /* board */
-#bdStage{position:relative;flex:1;min-height:0;overflow:hidden;direction:ltr}
+#bdStage{position:relative;flex:1;min-height:0;overflow:hidden;direction:ltr;transition:background .3s}
 #bdStage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #bdFx{touch-action:none;cursor:crosshair}
-.bdz{position:absolute;bottom:16px;left:16px;display:flex;align-items:center;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:5px;box-shadow:var(--shadow);z-index:6}
-.bdz button{min-width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:700}
-.bdz button:hover{background:var(--bg)}
-.bdz span{font-size:13px;min-width:46px;text-align:center;font-variant-numeric:tabular-nums}
-.bdhint{position:absolute;bottom:20px;right:16px;max-width:300px;font-size:12.5px;padding:8px 12px;border-radius:10px;background:rgba(0,0,0,.6);color:#fff;transition:opacity .6s;pointer-events:none;direction:rtl;z-index:6}
+.bdpill{position:absolute;z-index:8;display:flex;align-items:center;gap:2px;padding:5px;border-radius:16px;background:var(--glass);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);border:1px solid var(--line);box-shadow:var(--pop);color:var(--text);direction:ltr}
+.bdpill button{min-width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-weight:700;padding:0 8px;font-size:15px;transition:.15s}
+.bdpill button:hover{background:var(--bg)}
+.bdpill button.on{background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand)}
+.bdpill button:disabled{opacity:.35;pointer-events:none}
+.bdpill .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+.bdpill span{font-size:13px;min-width:46px;text-align:center;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:700}
+#bdZoom{left:16px;bottom:16px}
+#bdHist{right:16px;bottom:16px}
+#bdView{left:14px;top:14px}
+.bdbg{position:absolute;z-index:9;left:14px;top:66px;width:min(310px,calc(100vw - 28px));padding:15px;border-radius:18px;display:flex;flex-direction:column;gap:14px;background:var(--glass);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);border:1px solid var(--line);box-shadow:var(--pop);direction:rtl;color:var(--text)}
+.bdbg h4{margin:0 0 8px;font-size:13px;color:var(--muted)}
+.pats,.bgsws{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pat,.bgsw{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted)}
+.pat i,.bgsw i{display:block;width:100%;aspect-ratio:1;border-radius:11px;border:2px solid var(--line);background-color:#fff;transition:.15s}
+.pat:hover i,.bgsw:hover i{transform:translateY(-2px)}
+.pat[data-v=grid] i{background-image:linear-gradient(#c3c9de 1px,transparent 1px),linear-gradient(90deg,#c3c9de 1px,transparent 1px);background-size:9px 9px}
+.pat[data-v=dots] i{background-image:radial-gradient(#8f98b8 1.3px,transparent 1.6px);background-size:9px 9px;background-position:4px 4px}
+.pat[data-v=lines] i{background-image:linear-gradient(#c3c9de 1px,transparent 1px);background-size:100% 9px}
+.pat.on,.bgsw.on{color:var(--brand)}
+.pat.on i,.bgsw.on i{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
+.bdhint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);max-width:340px;width:max-content;text-align:center;font-size:12.5px;padding:8px 14px;border-radius:12px;background:rgba(15,17,26,.72);color:#fff;transition:opacity .6s;pointer-events:none;direction:rtl;z-index:6}
+@media(max-width:900px){#bdView{top:auto;bottom:66px;left:12px}.bdbg{top:auto;bottom:116px;left:12px}#bdZoom{left:12px;bottom:12px}#bdHist{right:12px;bottom:12px}.bdhint{display:none}}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;padding:10px 18px;border-radius:12px;opacity:0;transition:.25s;pointer-events:none;z-index:99;font-size:14px;max-width:90vw}
 #toast.on{opacity:1;transform:translateX(-50%)}
 /* languages */
@@ -452,10 +470,22 @@ button.chip:hover{border-color:var(--brand);color:var(--brand)}
 
 <!-- BOARD -->
 <section class="view full" id="v-board">
-  <div class="tbar" id="bdTb"></div>
   <div id="bdStage">
     <canvas id="bdBase"></canvas><canvas id="bdFx"></canvas>
-    <div class="bdz"><button id="bzOut">−</button><span id="bzLbl">100%</span><button id="bzIn">+</button><button id="bzHome" title="العودة للبداية">⌂</button></div>
+    <div class="dockwrap" id="bdDock"></div>
+    <div class="bdpill" id="bdView">
+      <button id="bBg" title="الخلفية والنمط"><svg data-i="bgi"></svg></button>
+      <button id="bPng" title="حفظ السبورة كصورة"><svg data-i="img"></svg></button>
+      <i class="sep"></i>
+      <button id="bFocus" title="وضع التركيز — يخفي الشريط العلوي"><svg data-i="focus"></svg></button>
+      <button id="bFs" title="ملء الشاشة"><svg data-i="fs"></svg></button>
+    </div>
+    <div class="bdbg" id="bdBgPop" hidden>
+      <div><h4>نمط الورقة</h4><div class="pats" id="bdPat"><button class="pat" data-v="grid"><i></i>مربعات</button><button class="pat" data-v="dots"><i></i>نقاط</button><button class="pat" data-v="lines"><i></i>خطوط</button><button class="pat" data-v="plain"><i></i>سادة</button></div></div>
+      <div><h4>لون الخلفية</h4><div class="bgsws" id="bdBg"><button class="bgsw" data-v="white"><i style="background:#fff"></i>أبيض</button><button class="bgsw" data-v="cream"><i style="background:#fbf5e6"></i>ورقي</button><button class="bgsw" data-v="black"><i style="background:#15171a"></i>أسود</button><button class="bgsw" data-v="green"><i style="background:#1f4d3a"></i>أخضر</button></div></div>
+    </div>
+    <div class="bdpill" id="bdZoom"><button id="bzOut" title="تصغير">−</button><span id="bzLbl">100%</span><button id="bzIn" title="تكبير">+</button><i class="sep"></i><button id="bzFit" title="عرض كل المحتوى" style="font-size:12px">الكل</button><button id="bzHome" title="العودة للبداية">⌂</button></div>
+    <div class="bdpill" id="bdHist"><button id="bUndo" title="تراجع (Ctrl+Z)"><svg data-i="undo"></svg></button><button id="bRedo" title="إعادة (Ctrl+Shift+Z)"><svg data-i="redo"></svg></button><i class="sep"></i><button id="bClear" title="مسح السبورة"><svg data-i="trash"></svg></button></div>
     <div class="bdhint" id="bdHint">مساحة بلا نهاية: تنقّل بإصبعين أو عجلة الماوس أو Space + سحب. زر اليد لوضع التحريك بإصبع واحد.</div>
   </div>
 </section>
@@ -509,7 +539,7 @@ play:'<path d="M6 4l14 8-14 8z"/>',pause:'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
 reset:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
 skip:'<path d="M5 4l10 8-10 8zM19 5v14"/>',
 open:'<path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v3h16v-3"/>',
-chev:'<path d="m6 9 6 6 6-6"/>',free:'<path d="M3 16c2-9 4-9 5-4s3 5 5 0 4-8 8-3"/>',line:'<path d="M4 12h16M4 8v8M20 8v8"/>'};
+chev:'<path d="m6 9 6 6 6-6"/>',bgi:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>',free:'<path d="M3 16c2-9 4-9 5-4s3 5 5 0 4-8 8-3"/>',line:'<path d="M4 12h16M4 8v8M20 8v8"/>'};
 const icon=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[n]}</svg>`;
 function hydrate(r=document){$$('svg[data-i]',r).forEach(s=>{s.outerHTML=icon(s.dataset.i)})}
 let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),3200)}
@@ -640,8 +670,8 @@ return{refresh}}
 
 /* ---------- navigation ---------- */
 const VIEWS=['home','tasks','timer','pdf','board','lang'];
-function setFocus(on){document.body.classList.toggle('focus',!!on);const b=$('#pFocus');if(b)b.classList.toggle('on',!!on);setTimeout(()=>{BDM.resize();PDFM.refit()},120)}
-function go(v){if(!VIEWS.includes(v))v='home';if(v!=='pdf'&&document.body.classList.contains('focus'))setFocus(false);if(v!=='lang'&&window.speechSynthesis)speechSynthesis.cancel();VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));$$('nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
+function setFocus(on){document.body.classList.toggle('focus',!!on);['#pFocus','#bFocus'].forEach(i=>{const b=$(i);if(b)b.classList.toggle('on',!!on)});setTimeout(()=>{BDM.resize();PDFM.refit()},120)}
+function go(v){if(!VIEWS.includes(v))v='home';if(document.body.classList.contains('focus')&&!(v==='pdf'&&PDF.doc))setFocus(false);if(v!=='lang'&&window.speechSynthesis)speechSynthesis.cancel();VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));$$('nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
 try{history.replaceState(null,'','#'+v)}catch{}
 if(v==='home')renderHome();if(v==='pdf')PDFM.enter();if(v==='board')BDM.enter();if(v==='lang'&&matchMedia('(hover:hover)').matches)setTimeout(()=>$('#lgQ').focus(),60);window.scrollTo(0,0)}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});
@@ -867,7 +897,7 @@ const dz=$('#drop');dz.addEventListener('click',e=>{if(e.target.id!=='pickIn')$(
 PDFM.enter=()=>{if(!PDF.doc)renderLib();else showPage(PDF.n,true)};
 
 /* ---------- whiteboard ---------- */
-const BGC={white:'#ffffff',black:'#15171a',green:'#1f4d3a'};
+const BGC={white:'#ffffff',cream:'#fbf5e6',black:'#15171a',green:'#1f4d3a'};
 const BD={cam:{x:-30,y:-30,z:1},bg:'white',pat:'grid',store:new Store(),W:0,H:0,q:0};
 const BDM={};
 const bcv=$('#bdBase'),bfx=$('#bdFx'),bst=$('#bdStage');
@@ -875,7 +905,7 @@ let bdTS=Object.assign(defTS('#111827'),LS.get('sh.ts.board',{}));
 const bdInk=new Ink({fx:bfx,ts:bdTS,tool:'pen',store:BD.store,key:()=>'b',handPan:true,shapeHl:s=>straightStroke(s),space:()=>spaceDown,
 toScene:(cx,cy)=>{const r=bfx.getBoundingClientRect();return[(cx-r.left)/BD.cam.z+BD.cam.x,(cy-r.top)/BD.cam.z+BD.cam.y]},
 scale:()=>BD.cam.z,applyXf:c=>{const z=BD.cam.z*DPR;c.setTransform(z,0,0,z,-BD.cam.x*z,-BD.cam.y*z)},
-redrawBase:()=>bdReq(),addToBase:s=>{if(s.hl){bdReq();return}const c=bcv.getContext('2d'),k=BD.cam.z*DPR;c.setTransform(k,0,0,k,-BD.cam.x*k,-BD.cam.y*k);drawStroke(c,s)},changed:()=>bdSaveSoon(),saveTS:()=>LS.set('sh.ts.board',bdTS),
+redrawBase:()=>bdReq(),addToBase:s=>{if(s.hl){bdReq();return}const c=bcv.getContext('2d'),k=BD.cam.z*DPR;c.setTransform(k,0,0,k,-BD.cam.x*k,-BD.cam.y*k);drawStroke(c,s)},changed:()=>{bdSaveSoon();bdHistUI()},saveTS:()=>LS.set('sh.ts.board',bdTS),
 onPan:(dx,dy)=>{BD.cam.x-=dx/BD.cam.z;BD.cam.y-=dy/BD.cam.z;bdReq();bdSaveSoon()},
 onGesture:g=>{const r=bst.getBoundingClientRect();BD.cam.x-=g.dx/BD.cam.z;BD.cam.y-=g.dy/BD.cam.z;bdZoom(g.ratio,g.cx-r.left,g.cy-r.top)}});
 Object.defineProperty(bdInk.o,'store',{get:()=>BD.store,configurable:true});
@@ -894,23 +924,35 @@ if(k==='PageDown'||k==='ArrowLeft')showPage(PDF.n+1);else if(k==='PageUp'||k==='
 else if(k==='Home'){e.preventDefault();showPage(1)}else if(k==='End'){e.preventDefault();showPage(PDF.N)}
 else if(k==='+'||k==='=')zoomTo(PDF.zoom*1.15);else if(k==='-')zoomTo(PDF.zoom/1.15)}});
 addEventListener('keyup',e=>{if(e.code==='Space')spaceDown=false});
-const bdTb=mkTb($('#bdTb'),bdInk,{trail:`<button class="tbtn" id="bUndo" title="تراجع (Ctrl+Z)">${icon('undo')}<span>تراجع</span></button><button class="tbtn" id="bClear" title="مسح السبورة">${icon('trash')}<span>مسح</span></button>`,
-row2:`<span class="div"></span><div class="seg" id="bdPat"><button data-v="grid">مربعات</button><button data-v="plain">سادة</button><button data-v="lines">خطوط</button></div><div class="bgs" id="bdBg"><button data-v="white" style="--sw:#fff" title="أبيض"></button><button data-v="black" style="--sw:#15171a" title="أسود"></button><button data-v="green" style="--sw:#1f4d3a" title="أخضر"></button></div>`});
+const bdDark=()=>BD.bg==='black'||BD.bg==='green';
+const bdTb=mkDock($('#bdDock'),bdInk);
 bdTb.refresh();
-function bdFmtUI(){$$('#bdPat button').forEach(b=>b.classList.toggle('on',b.dataset.v===BD.pat));$$('#bdBg button').forEach(b=>b.classList.toggle('on',b.dataset.v===BD.bg));bst.style.background=BGC[BD.bg];$('#bzLbl').textContent=Math.round(BD.cam.z*100)+'%'}
-function bdAdaptPen(){const dark=BD.bg!=='white';['pen'].forEach(t=>{const s=bdTS[t];if(dark&&s.c==='#111827')s.c='#ffffff';if(!dark&&s.c==='#ffffff')s.c='#111827'});LS.set('sh.ts.board',bdTS);bdTb.refresh()}
-$('#bdPat').onclick=e=>{const b=e.target.closest('button');if(!b)return;BD.pat=b.dataset.v;bdFmtUI();bdReq();bdSaveSoon()};
-$('#bdBg').onclick=e=>{const b=e.target.closest('button');if(!b)return;BD.bg=b.dataset.v;bdAdaptPen();bdFmtUI();bdReq();bdSaveSoon()};
-$('#bdTb').addEventListener('click',e=>{if(e.target.closest('#bUndo'))bdUndo(false);if(e.target.closest('#bClear')&&confirm('تمسح السبورة كلها؟')){BD.store.clearAll();bdInk.clearTemp();bdReq();bdSaveSoon()}});
+function bdFmtUI(){$$('#bdPat .pat').forEach(b=>b.classList.toggle('on',b.dataset.v===BD.pat));$$('#bdBg .bgsw').forEach(b=>b.classList.toggle('on',b.dataset.v===BD.bg));bst.style.background=BGC[BD.bg]||BGC.white;$('#bzLbl').textContent=Math.round(BD.cam.z*100)+'%'}
+function bdAdaptPen(){const dark=bdDark();['pen'].forEach(t=>{const s=bdTS[t];if(dark&&s.c==='#111827')s.c='#ffffff';if(!dark&&s.c==='#ffffff')s.c='#111827'});LS.set('sh.ts.board',bdTS);bdTb.refresh()}
+function bdHistUI(){const st=BD.store,u=$('#bUndo'),r=$('#bRedo'),x=$('#bClear');if(u)u.disabled=!st.u.length;if(r)r.disabled=!st.r.length;if(x)x.disabled=!(st.pages.b&&st.pages.b.length)}
+$('#bdPat').onclick=e=>{const b=e.target.closest('.pat');if(!b)return;BD.pat=b.dataset.v;bdFmtUI();bdReq();bdSaveSoon()};
+$('#bdBg').onclick=e=>{const b=e.target.closest('.bgsw');if(!b)return;BD.bg=b.dataset.v;bdAdaptPen();bdFmtUI();bdReq();bdSaveSoon()};
+$('#bBg').onclick=()=>{const p=$('#bdBgPop');p.hidden=!p.hidden;$('#bBg').classList.toggle('on',!p.hidden)};
+document.addEventListener('pointerdown',e=>{const p=$('#bdBgPop');if(p.hidden||e.target.closest('#bdBgPop,#bBg'))return;p.hidden=true;$('#bBg').classList.remove('on')});
+$('#bUndo').onclick=()=>bdUndo(false);$('#bRedo').onclick=()=>bdUndo(true);
+$('#bClear').onclick=()=>{if(confirm('تمسح السبورة كلها؟ تقدر تتراجع بعدها.')){if(BD.store.clearPage('b')){bdInk.clearTemp();bdReq();bdSaveSoon()}}};
+$('#bFocus').onclick=()=>setFocus(!document.body.classList.contains('focus'));
+$('#bFs').onclick=()=>$('#fsBtn').click();
+$('#bPng').onclick=()=>{if(!bcv.width)return;bcv.toBlob(b=>{if(!b)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='سبورة.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('اتحفظت السبورة كصورة')})};
+function bdHome(){BD.cam.x=-30;BD.cam.y=-30;BD.cam.z=1;bdReq();bdSaveSoon()}
+function bdFit(){const arr=BD.store.pages.b||[];if(!arr.length||!BD.W){bdHome();return}
+let a=1e9,b=1e9,c=-1e9,d=-1e9;arr.forEach(s=>{if(!s.bb)bbox(s);if(s.bb[0]<a)a=s.bb[0];if(s.bb[1]<b)b=s.bb[1];if(s.bb[2]>c)c=s.bb[2];if(s.bb[3]>d)d=s.bb[3]});
+const pad=90,w=Math.max(40,c-a),h=Math.max(40,d-b),z=Math.max(.25,Math.min(2,(BD.W-pad*2)/w,(BD.H-pad*2)/h));BD.cam.z=z;BD.cam.x=(a+c)/2-BD.W/2/z;BD.cam.y=(b+d)/2-BD.H/2/z;bdReq();bdSaveSoon()}
 function bdUndo(redo){const k=redo?BD.store.redo():BD.store.undo();if(k!=null){bdReq();bdSaveSoon()}}
 BDM.resize=()=>{const r=bst.getBoundingClientRect();if(!r.width||!r.height)return;BD.W=r.width;BD.H=r.height;[bcv,bfx].forEach(c=>{c.width=Math.round(r.width*DPR);c.height=Math.round(r.height*DPR)});bdReq()};
 function bdReq(){if(BD.q)return;BD.q=requestAnimationFrame(()=>{BD.q=0;bdDraw();bdInk.render()})}
 function bdDraw(){const c=bcv.getContext('2d'),z=BD.cam.z,cam=BD.cam;if(!bcv.width)return;
 c.setTransform(DPR,0,0,DPR,0,0);c.fillStyle=BGC[BD.bg];c.fillRect(0,0,BD.W,BD.H);
-const dark=BD.bg!=='white';c.strokeStyle=dark?'rgba(255,255,255,.11)':'rgba(60,80,130,.17)';c.lineWidth=1;
-if(BD.pat!=='plain'){const sp=(BD.pat==='grid'?34:42)*z;if(sp>7){c.beginPath();const ox=-((cam.x*z)%sp),oy=-((cam.y*z)%sp);
-for(let y=oy;y<=BD.H;y+=sp){const yy=Math.round(y)+.5;c.moveTo(0,yy);c.lineTo(BD.W,yy)}
-if(BD.pat==='grid')for(let x=ox;x<=BD.W;x+=sp){const xx=Math.round(x)+.5;c.moveTo(xx,0);c.lineTo(xx,BD.H)}c.stroke()}}
+const dark=bdDark();c.strokeStyle=dark?'rgba(255,255,255,.11)':'rgba(60,80,130,.17)';c.fillStyle=dark?'rgba(255,255,255,.3)':'rgba(60,80,130,.38)';c.lineWidth=1;
+if(BD.pat!=='plain'){const sp=(BD.pat==='lines'?42:BD.pat==='dots'?30:34)*z;if(sp>7){const ox=-((cam.x*z)%sp),oy=-((cam.y*z)%sp);
+if(BD.pat==='dots'){const r=Math.max(1,Math.min(2.3,z*1.3));c.beginPath();for(let y=oy;y<=BD.H+sp;y+=sp)for(let x=ox;x<=BD.W+sp;x+=sp){c.moveTo(x+r,y);c.arc(x,y,r,0,6.2832)}c.fill()}
+else{c.beginPath();for(let y=oy;y<=BD.H;y+=sp){const yy=Math.round(y)+.5;c.moveTo(0,yy);c.lineTo(BD.W,yy)}
+if(BD.pat==='grid')for(let x=ox;x<=BD.W;x+=sp){const xx=Math.round(x)+.5;c.moveTo(xx,0);c.lineTo(xx,BD.H)}c.stroke()}}}
 const k=z*DPR;c.setTransform(k,0,0,k,-cam.x*k,-cam.y*k);
 const x0=cam.x,y0=cam.y,x1=cam.x+BD.W/z,y1=cam.y+BD.H/z;
 const vis=s=>{const b=s.bb;return!(b&&(b[2]<x0||b[0]>x1||b[3]<y0||b[1]>y1))};
@@ -918,11 +960,11 @@ const arr=BD.store.pages.b||[];
 /* الهايلايت الأول (تحت)، وبعدين باقي الكتابة فوقه */
 arr.forEach(s=>{if(s.hl&&vis(s))drawStroke(c,s)});
 arr.forEach(s=>{if(!s.hl&&vis(s))drawStroke(c,s)});
-$('#bzLbl').textContent=Math.round(z*100)+'%'}
+$('#bzLbl').textContent=Math.round(z*100)+'%';bdHistUI()}
 function bdZoom(ratio,px,py){const cam=BD.cam,wx=cam.x+px/cam.z,wy=cam.y+py/cam.z;cam.z=Math.max(.25,Math.min(4,cam.z*ratio));cam.x=wx-px/cam.z;cam.y=wy-py/cam.z;bdReq();bdSaveSoon()}
 bfx.addEventListener('wheel',e=>{e.preventDefault();const r=bst.getBoundingClientRect();if(e.ctrlKey||e.metaKey)bdZoom(Math.exp(-e.deltaY*.01),e.clientX-r.left,e.clientY-r.top);else{BD.cam.x+=e.deltaX/BD.cam.z;BD.cam.y+=e.deltaY/BD.cam.z;bdReq();bdSaveSoon()}},{passive:false});
 $('#bzIn').onclick=()=>bdZoom(1.2,BD.W/2,BD.H/2);$('#bzOut').onclick=()=>bdZoom(1/1.2,BD.W/2,BD.H/2);
-$('#bzHome').onclick=()=>{BD.cam.x=-30;BD.cam.y=-30;BD.cam.z=1;bdReq();bdSaveSoon()};
+$('#bzHome').onclick=bdHome;$('#bzFit').onclick=bdFit;
 let bdT;function bdSaveSoon(){clearTimeout(bdT);bdT=setTimeout(()=>DB.put('kv',{id:'board',pages:BD.store.pages,cam:BD.cam,bg:BD.bg,pat:BD.pat}),700)}
 let bdLoaded=false;
 BDM.enter=async()=>{BDM.resize();if(!bdLoaded){bdLoaded=true;const s=await DB.get('kv','board');if(s){BD.store=new Store(s.pages);BD.cam=Object.assign(BD.cam,s.cam||{});BD.bg=s.bg||'white';BD.pat=s.pat||'grid';bdAdaptPen()}bdFmtUI();bdReq()}
