@@ -37,15 +37,57 @@ nav button.on{background:color-mix(in srgb,var(--brand) 14%,transparent);color:v
 h1{font-size:26px;margin:0 0 2px;font-weight:800}
 .sub{color:var(--muted);margin:0 0 20px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-.hcard{padding:18px;text-align:start;display:flex;flex-direction:column;gap:10px;min-height:170px;transition:.15s;position:relative;overflow:hidden}
-.hcard:hover{transform:translateY(-3px)}
-.hcard .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;color:#fff;background:var(--g)}
-.hcard h3{margin:0;font-size:18px}
-.hcard p{margin:0;color:var(--muted);font-size:14px}
-.hcard .big{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:auto}
-.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
-.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));border-radius:99px;transition:width .3s}
+/* home */
+.h-hd{margin-bottom:22px}
+.h-hd h1{font-size:30px}
+.h-hd .sub{margin:0}
+.h-top{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px}
+.h-hero{--c:var(--brand);padding:28px;display:flex;flex-direction:column;gap:18px;border-inline-start:6px solid var(--c);min-height:236px}
+.h-kick{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:700;color:var(--muted);font-size:15px}
+.h-tag{font-size:12px;font-weight:700;color:var(--c);padding:2px 10px;border-radius:99px;background:color-mix(in srgb,var(--c) 13%,transparent)}
+.h-task{font-size:clamp(26px,4.2vw,40px);font-weight:800;line-height:1.35;word-break:break-word}
+.h-acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
+.h-go,.h-ok{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:14px;font-weight:800;font-size:16px}
+.h-go{background:var(--c);color:#fff}
+.h-ok{border:1.5px solid var(--line);background:var(--surface)}
+.h-ok:hover{background:var(--bg)}
+.h-go:active,.h-ok:active{transform:scale(.97)}
+.h-go svg,.h-ok svg{width:18px;height:18px}
+.h-day{padding:24px;display:flex;flex-direction:column;gap:14px}
+.h-dl{font-weight:700;color:var(--muted);font-size:14px}
+.h-dv{font-size:40px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.h-note{margin:0;color:var(--muted);font-size:14px}
+.h-dr{display:flex;flex-direction:column;gap:5px}
+.h-drl{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:700}
+.h-drl span{display:flex;align-items:center;gap:7px}
+.h-drl i{width:9px;height:9px;border-radius:3px;background:var(--c)}
+.h-drb{height:5px;border-radius:9px;background:var(--line);overflow:hidden}
+.h-drb u{display:block;height:100%;background:var(--c)}
+.h-dm{margin-top:auto;display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:14px;font-weight:600;border-top:1px solid var(--line);padding-top:12px}
+.h-h{font-size:16px;font-weight:800;margin:30px 0 10px;color:var(--muted)}
+.h-subs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.h-sub{display:flex;flex-direction:column;gap:7px;padding:14px 16px;text-align:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;transition:border-color .15s}
+.h-sub:hover{border-color:var(--c)}
+.h-sn{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px}
+.h-sn i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.h-sv{display:flex;align-items:baseline;gap:6px}
+.h-sv b{font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.h-sv span{color:var(--muted);font-size:13px;font-weight:600}
+.h-sp{height:4px;border-radius:9px;background:var(--line);overflow:hidden}
+.h-sp u{display:block;height:100%;background:var(--c)}
+.h-tools{overflow:hidden}
+.h-tool{display:flex;align-items:center;gap:14px;width:100%;padding:14px 18px;text-align:start;border-bottom:1px solid var(--line);transition:background .15s}
+.h-tool:last-child{border-bottom:0}
+.h-tool:hover{background:var(--bg)}
+.h-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);flex:none}
+.h-tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.h-tx b{font-size:16.5px}
+.h-tx small{color:var(--muted);font-size:13.5px}
+.h-val{font-weight:800;font-variant-numeric:tabular-nums;font-size:18px}
+.h-ch{color:var(--muted);width:18px;height:18px}
+.h-go:focus-visible,.h-ok:focus-visible,.h-sub:focus-visible,.h-tool:focus-visible{outline:2px solid var(--c,var(--brand));outline-offset:2px}
+@media(max-width:820px){.h-top{grid-template-columns:1fr}.h-hero{padding:22px;min-height:0}}
+@media(prefers-reduced-motion:reduce){.h-sub,.h-tool{transition:none}}
 /* tasks */
 .seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
 .seg button{padding:7px 16px;border-radius:9px;font-weight:700;font-size:14px;color:var(--muted)}
@@ -55,76 +97,145 @@ h1{font-size:26px;margin:0 0 2px;font-weight:800}
 .x{color:var(--muted);font-size:20px;line-height:1;padding:0 4px}
 .x:hover{color:#ef4444}
 .link{color:var(--muted);font-size:13px;text-decoration:underline}
-.tk{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start;margin-top:16px}
-.tkside{padding:18px;display:flex;flex-direction:column;gap:16px;position:sticky;top:calc(var(--top) + 16px)}
-.sumring{position:relative;width:132px;height:132px;margin:0 auto}
-.sumring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.sumring circle{fill:none;stroke-width:11;stroke-linecap:round}
-.sumring .tr{stroke:var(--line)}
-.sumring .pr{stroke:var(--ok);transition:stroke-dashoffset .4s}
-.sumring .lb{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:30px;font-weight:800;line-height:1}
-.sumring .lb small{font-size:12px;color:var(--muted);font-weight:600;margin-top:5px}
-.sjl{display:flex;flex-direction:column;gap:6px}
-.sj{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;text-align:start;border:1px solid transparent}
-.sj i{width:10px;height:10px;border-radius:50%;background:var(--c)}
-.sj .n{font-weight:700;font-size:14.5px}
-.sj .c{font-size:12px;font-weight:700;color:var(--muted)}
-.sj .mini{grid-column:1/-1;height:4px;border-radius:9px;background:var(--line);overflow:hidden}
-.sj .mini u{display:block;height:100%;background:var(--c);transition:width .3s}
-.sj:hover{background:var(--bg)}
-.sj.on{background:color-mix(in srgb,var(--c) 12%,transparent);border-color:color-mix(in srgb,var(--c) 35%,transparent)}
-.tkmain{padding:20px;border-top:5px solid var(--c);display:flex;flex-direction:column;gap:16px;min-height:420px}
-.tkh{display:flex;align-items:center;gap:10px}
-.tkh h2{margin:0;font-size:22px;flex:1;outline:none;padding:0 6px;border-radius:8px}
-.tkh h2[contenteditable]:focus{background:var(--bg)}
-.add{display:flex;gap:8px}
-.add input{flex:1;min-width:0;padding:13px 16px;border-radius:14px;border:1px solid var(--line);background:var(--bg);font-size:16px}
-.add input:focus{outline:2px solid var(--c);border-color:transparent}
-.add button{padding:0 22px;border-radius:14px;background:var(--c);color:#fff;font-weight:700}
-.flt{display:flex;gap:6px}
-.flt button{padding:5px 14px;border-radius:99px;font-size:13px;font-weight:700;color:var(--muted);border:1px solid var(--line)}
-.flt button.on{background:var(--c);color:#fff;border-color:var(--c)}
-.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-.ti{display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);transition:.15s}
-.ti:hover{border-color:var(--c)}
-.ti span{flex:1;word-break:break-word}
-.ti.done span{text-decoration:line-through;color:var(--muted)}
-.chk{width:24px;height:24px;border-radius:8px;border:2px solid var(--c);flex:none;display:grid;place-items:center}
-.done .chk{background:var(--c)}
-.done .chk::after{content:'';width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
 .emp{text-align:center;color:var(--muted);padding:44px 0}
-@media(max-width:820px){.tk{grid-template-columns:1fr}.tkside{position:static}.sjl{flex-direction:row;overflow-x:auto}.sj{min-width:140px}}
+#v-tasks{max-width:780px}
+.t-top{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.t-top .sub{margin:0}
+.t-hero{margin:18px 0 26px}
+.t-line{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.t-lbl{font-size:20px;font-weight:700}
+.t-num{font-size:64px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.t-done{margin-inline-start:auto;color:var(--muted);font-size:14px;font-weight:600}
+.t-strip{display:flex;gap:10px;margin-top:16px;min-height:24px}
+.t-grp{display:flex;gap:2px;flex-basis:0;min-width:8px;height:24px;padding:0;border-radius:6px;transition:opacity .2s}
+.t-grp:hover{opacity:1!important}
+.t-seg{flex:1;min-width:2px;border-radius:3px;background:color-mix(in srgb,var(--c) 20%,transparent);transition:background .25s}
+.t-seg.d{background:var(--c)}
+.t-none{flex:1;height:24px;border-radius:6px;border:1.5px dashed var(--line)}
+.t-tabs{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:20px;scrollbar-width:none}
+.t-tabs::-webkit-scrollbar{display:none}
+.t-tab{display:flex;align-items:center;gap:8px;padding:12px 14px;font-weight:700;color:var(--muted);white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-1px;transition:color .15s}
+.t-tab:hover{color:var(--text)}
+.t-tab i{width:10px;height:10px;border-radius:3px;background:var(--c,var(--muted))}
+.t-tab b{font-size:12px;font-weight:700;min-width:22px;text-align:center;padding:1px 7px;border-radius:99px;background:var(--bg);font-variant-numeric:tabular-nums}
+.t-tab.on{color:var(--text);border-bottom-color:var(--c,var(--brand))}
+.t-subhd{display:flex;align-items:center;gap:8px;margin:0 0 12px}
+.t-subhd h2{margin:0;font-size:22px;font-weight:800}
+.t-ren{padding:6px 12px;border-radius:9px;font-size:13px;font-weight:700;color:var(--muted);border:1px solid var(--line)}
+.t-ren:hover{color:var(--text);background:var(--bg)}
+.t-rin{font:inherit;font-size:22px;font-weight:800;padding:2px 10px;border-radius:10px;border:1.5px solid var(--c);background:var(--surface);color:var(--text);min-width:0;width:min(280px,100%)}
+.t-add{display:flex;gap:8px;margin-bottom:8px}
+.t-add input,.t-add select{padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);font-size:16px;min-width:0}
+.t-add input{flex:1}
+.t-add select{font-weight:700;color:var(--text);max-width:42%}
+.t-add input:focus,.t-add select:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 22%,transparent)}
+.t-add button{padding:0 24px;border-radius:14px;background:var(--c);color:#fff;font-weight:800;font-size:16px}
+.t-add button:active{transform:scale(.97)}
+.t-sec{display:flex;align-items:center;gap:10px;margin:26px 0 4px;font-weight:800;font-size:15px;color:var(--muted)}
+.t-sec b{font-size:12px;padding:1px 8px;border-radius:99px;background:var(--bg);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.t-sec .link{margin-inline-start:auto}
+.t-fold{display:flex;align-items:center;gap:8px;font:inherit;font-weight:800;color:inherit}
+.t-fold svg{width:16px;height:16px;transition:transform .2s}
+.t-fold[aria-expanded=false] svg{transform:rotate(90deg)}
+.t-list{list-style:none;margin:0;padding:0}
+.t-row{display:flex;align-items:center;gap:10px;padding:6px 4px;border-bottom:1px solid var(--line);min-height:56px}
+.t-chk{position:relative;width:40px;height:40px;flex:none;margin-inline:-6px 0}
+.t-chk::before{content:'';position:absolute;inset:7px;border-radius:50%;border:2px solid var(--c);transition:background .15s}
+.t-chk:hover::before{background:color-mix(in srgb,var(--c) 18%,transparent)}
+.t-row.done .t-chk::before{background:var(--c)}
+.t-row.done .t-chk::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:translate(-50%,-62%) rotate(45deg)}
+.t-txt{flex:1;min-width:0;word-break:break-word;font-size:16px;line-height:1.55;padding-block:6px}
+.t-row.done .t-txt{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1.5px}
+.t-tag{font-size:12px;font-weight:700;color:var(--c);padding:2px 9px;border-radius:99px;background:color-mix(in srgb,var(--c) 13%,transparent);white-space:nowrap}
+.t-edit{flex:1;min-width:0;font:inherit;font-size:16px;padding:8px 12px;border-radius:11px;border:1.5px solid var(--c);background:var(--surface);color:var(--text)}
+.t-edit:focus,.t-rin:focus{outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 22%,transparent)}
+.t-acts{display:flex;flex:none}
+.t-ico{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--muted)}
+.t-ico:hover{background:var(--bg);color:var(--text)}
+.t-ico.del:hover{color:#ef4444}
+.t-ico.on{color:#f59e0b}
+.t-ico svg{width:19px;height:19px}
+@media(hover:hover){.t-acts .t-ico:not(.on){opacity:0}.t-row:hover .t-ico,.t-row:focus-within .t-ico{opacity:1}}
+.t-empty{padding:34px 12px;text-align:center;color:var(--muted)}
+.t-undo{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(16px);display:flex;align-items:center;gap:14px;background:#111827;color:#fff;padding:8px 8px 8px 18px;border-radius:14px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:98;max-width:92vw}
+.t-undo.on{opacity:1;pointer-events:auto;transform:translateX(-50%)}
+.t-undo button{padding:7px 14px;border-radius:10px;background:rgba(255,255,255,.16);font-weight:800}
+.t-tab:focus-visible,.t-ico:focus-visible,.t-chk:focus-visible,.t-grp:focus-visible,.t-fold:focus-visible,.t-ren:focus-visible,.t-undo button:focus-visible{outline:2px solid var(--c,var(--brand));outline-offset:2px}
+@media(max-width:520px){.t-num{font-size:52px}.t-add button{padding:0 18px}}
+@media(prefers-reduced-motion:reduce){.t-seg,.t-chk::before,.t-grp,.t-undo,.t-fold svg{transition:none}}
 /* timer */
-.tmx{max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:24px}
-.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%}
-.modes button{padding:10px 6px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;line-height:1.25}
-.modes b{font-size:20px}
-.modes small{color:var(--muted);font-size:12px}
-.modes button.on{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-color:transparent}
-.modes button.on small{color:#ffffffcc}
-.free{display:none;gap:12px}
-.free.on{display:flex}
-.free label{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:4px;font-weight:600}
-.free input{width:110px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:16px}
-.ring{position:relative;width:min(80vw,320px);aspect-ratio:1;border-radius:50%;background:var(--surface);box-shadow:var(--shadow)}
-.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring circle{fill:none;stroke-width:10;stroke-linecap:round}
-.ring .tr{stroke:var(--line)}
-.ring .pr{stroke:url(#tmg);transition:stroke-dashoffset .25s linear}
-.ring.brk .pr{stroke:var(--ok)}
-.ring .ct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
-.ring .ph{font-weight:700;color:var(--muted);font-size:15px}
-.ring .tt{font-size:60px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
-.dots{display:flex;gap:8px}
-.dots i{width:10px;height:10px;border-radius:50%;background:var(--line);transition:.2s}
-.dots i.on{background:var(--brand);transform:scale(1.2)}
-.ctrl{display:flex;gap:18px;align-items:center}
-.rb{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
-.rb:hover{color:var(--text)}
-.rb.go{width:84px;height:84px;border:0;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 8px 22px color-mix(in srgb,var(--brand) 40%,transparent)}
-.rb.go svg{width:32px;height:32px}
-.tmeta{display:flex;gap:16px;align-items:center;color:var(--muted);font-size:14px;flex-wrap:wrap;justify-content:center}
-.tmeta label{display:flex;align-items:center;gap:6px;cursor:pointer}
+#v-timer{--ph:var(--brand);--ph2:var(--brand2)}
+#v-timer[data-ph=break]{--ph:#16a34a;--ph2:#4ade80}
+.tmgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+@media(max-width:900px){.tmgrid{grid-template-columns:1fr}}
+.tmmain{position:relative;overflow:hidden;padding:26px 18px 26px;display:flex;flex-direction:column;align-items:center;gap:22px;background:radial-gradient(120% 85% at 50% 0%,color-mix(in srgb,var(--ph) 14%,var(--surface)),var(--surface) 68%);transition:background .5s}
+.tmtop{position:absolute;top:12px;inset-inline-start:12px;display:flex;gap:2px;z-index:2}
+.tmtabs button{min-width:98px}
+.tmtabs button.on{background:var(--ph);box-shadow:0 4px 12px color-mix(in srgb,var(--ph) 40%,transparent)}
+.tmring{position:relative;width:min(84vw,360px);aspect-ratio:1}
+.tmring svg{width:100%;height:100%;overflow:visible}
+.tmring .tr{fill:none;stroke:var(--line);stroke-width:12}
+.tmring .pr{fill:none;stroke:url(#tmg);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset .25s linear;filter:drop-shadow(0 0 7px color-mix(in srgb,var(--ph) 50%,transparent))}
+.tmring .tk{stroke:var(--line);stroke-width:1.6;stroke-linecap:round}
+.tmring .tk.m{stroke-width:2.6;stroke:color-mix(in srgb,var(--muted) 50%,var(--line))}
+.tmring .hd{fill:#fff;stroke:var(--ph);stroke-width:4.5;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+.tmct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center}
+.tmct .pl{font-weight:800;color:var(--ph);font-size:15px}
+.tmct .tt{font-size:clamp(52px,15vw,82px);font-weight:800;font-variant-numeric:tabular-nums;line-height:1;direction:ltr;letter-spacing:-1px}
+.tmct .ts{font-size:13.5px;color:var(--muted);font-weight:600;min-height:20px}
+.tmctl{display:flex;align-items:center;gap:22px}
+.rb{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--surface);color:var(--muted);transition:.15s}
+.rb:hover{color:var(--text);transform:translateY(-2px)}
+.rb.go{width:88px;height:88px;border:0;color:#fff;background:linear-gradient(135deg,var(--ph),var(--ph2));box-shadow:0 10px 26px color-mix(in srgb,var(--ph) 42%,transparent)}
+.rb.go:hover{color:#fff}
+.rb.go svg{width:34px;height:34px}
+.tmcyc{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13.5px;font-weight:600}
+.tmdots{display:flex;gap:7px}
+.tmdots i{width:11px;height:11px;border-radius:50%;background:var(--line);transition:.25s}
+.tmdots i.on{background:var(--ph);transform:scale(1.15);box-shadow:0 0 8px color-mix(in srgb,var(--ph) 55%,transparent)}
+.tmside{display:flex;flex-direction:column;gap:14px}
+.tmbox{padding:16px 16px 18px}
+.tmbox h3{margin:0 0 12px;font-size:15px}
+.tmpre{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tmpre button{padding:11px 8px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;line-height:1.35;transition:.15s}
+.tmpre button:hover{border-color:var(--brand)}
+.tmpre b{font-size:21px}
+.tmpre small{color:var(--muted);font-size:12px}
+.tmpre button.on{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-color:transparent;box-shadow:0 6px 16px color-mix(in srgb,var(--brand) 32%,transparent)}
+.tmpre button.on small{color:#ffffffd0}
+.free{display:none;gap:10px;margin-top:12px}
+.free.on{display:grid;grid-template-columns:1fr 1fr}
+.free label{display:flex;flex-direction:column;font-size:12.5px;color:var(--muted);gap:5px;font-weight:700}
+.free input{width:100%;padding:9px 11px;border-radius:11px;border:1px solid var(--line);background:var(--bg);font-size:16px}
+.free input:focus{outline:2px solid var(--brand);border-color:transparent}
+.tmsub{display:flex;flex-wrap:wrap;gap:8px}
+.sjc{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;border:1px solid var(--line);font-weight:700;font-size:13.5px;transition:.15s}
+.sjc i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.sjc:hover{border-color:var(--c)}
+.sjc.on{background:color-mix(in srgb,var(--c) 14%,transparent);border-color:color-mix(in srgb,var(--c) 50%,transparent)}
+.tmstat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.tmstat div{background:var(--bg);border-radius:14px;padding:10px 12px}
+.tmstat b{display:block;font-size:22px;font-weight:800;line-height:1.3}
+.tmstat small{color:var(--muted);font-size:12px;font-weight:600}
+.tbr{margin-top:10px}
+.tbl{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:5px}
+.tbl b{color:var(--muted)}
+.tbb{height:6px;border-radius:9px;background:var(--line);overflow:hidden}
+.tbb i{display:block;height:100%;background:var(--c);border-radius:9px;transition:width .4s}
+.tmnone{margin:0;color:var(--muted);font-size:13.5px}
+.sw2{display:flex;align-items:center;gap:11px;cursor:pointer;font-weight:600;font-size:14px;padding:7px 0}
+.sw2 input{display:none}
+.sw2 i{width:42px;height:25px;border-radius:99px;background:var(--line);position:relative;transition:.2s;flex:none}
+.sw2 i::after{content:'';position:absolute;top:3px;inset-inline-start:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw2 input:checked+i{background:var(--brand)}
+.sw2 input:checked+i::after{inset-inline-start:20px}
+.tmkeys{margin:10px 0 0;font-size:12px;color:var(--muted)}
+#v-timer.zen{max-width:none;padding:0;min-height:100vh;min-height:100dvh}
+#v-timer.zen.on{display:flex}
+#v-timer.zen .tmhead,#v-timer.zen .tmside{display:none}
+#v-timer.zen .tmgrid{display:flex;flex:1;width:100%}
+#v-timer.zen .tmmain{flex:1;border:0;border-radius:0;box-shadow:none;justify-content:center;gap:34px}
+#v-timer.zen .tmring{width:min(86vw,62vh,540px)}
 /* tool bars */
 .tbar{background:var(--surface);border-bottom:1px solid var(--line);flex:none;z-index:5}
 .tb1,.tb2{display:flex;align-items:center;gap:8px;padding:6px 10px;overflow-x:auto;scrollbar-width:none}
@@ -365,63 +476,74 @@ button.chip:hover{border-color:var(--brand);color:var(--brand)}
 
 <!-- HOME -->
 <section class="view" id="v-home">
-  <h1 id="hello">أهلاً</h1>
-  <p class="sub" id="today"></p>
-  <div class="home-grid">
-    <button class="card hcard" data-go="tasks" style="--g:linear-gradient(135deg,#16a34a,#22c55e)">
-      <div class="ic"><svg data-i="tasks"></svg></div><h3>المهام</h3>
-      <p id="hTasks">—</p><div class="bar"><i id="hTasksBar" style="width:0"></i></div>
-    </button>
-    <button class="card hcard" data-go="timer" style="--g:linear-gradient(135deg,#4f46e5,#7c3aed)">
-      <div class="ic"><svg data-i="timer"></svg></div><h3>المؤقت</h3>
-      <p id="hTimerP">جاهز للبدء</p><div class="big" id="hTimer">25:00</div>
-    </button>
-    <button class="card hcard" data-go="pdf" style="--g:linear-gradient(135deg,#ea580c,#f59e0b)">
-      <div class="ic"><svg data-i="pdf"></svg></div><h3>عارض PDF</h3>
-      <p id="hPdf">افتح ملفاتك واكتب عليها بالأقلام</p>
-    </button>
-    <button class="card hcard" data-go="board" style="--g:linear-gradient(135deg,#0891b2,#06b6d4)">
-      <div class="ic"><svg data-i="board"></svg></div><h3>السبورة</h3>
-      <p>ورقة كبيرة بلا حدود، بمربعات أو خطوط أو سادة</p>
-    </button>
-    <button class="card hcard" data-go="lang" style="--g:linear-gradient(135deg,#db2777,#f472b6)">
-      <div class="ic"><svg data-i="lang"></svg></div><h3>اللغات</h3>
-      <p>قاموس عربي ⇄ إنجليزي بالنطق ومشتقات الكلمة</p>
-    </button>
+  <header class="h-hd"><h1 id="hello">أهلاً</h1><p class="sub" id="today"></p></header>
+  <div class="h-top">
+    <section class="card h-hero" id="hHero"></section>
+    <aside class="card h-day" id="hDay"></aside>
+  </div>
+  <h2 class="h-h">المواد</h2>
+  <div class="h-subs" id="hSubs"></div>
+  <h2 class="h-h">أدواتك</h2>
+  <div class="card h-tools">
+    <button class="h-tool" data-go="tasks" style="--c:#16a34a"><span class="h-ic"><svg data-i="tasks"></svg></span><span class="h-tx"><b>المهام</b><small id="hTasks">—</small></span><span class="h-val" id="hTasksV"></span><svg class="h-ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button class="h-tool" data-go="timer" style="--c:#4f46e5"><span class="h-ic"><svg data-i="timer"></svg></span><span class="h-tx"><b>المؤقت</b><small id="hTimerP">جاهز للبدء</small></span><span class="h-val" id="hTimer">25:00</span><svg class="h-ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button class="h-tool" data-go="pdf" style="--c:#ea580c"><span class="h-ic"><svg data-i="pdf"></svg></span><span class="h-tx"><b>عارض PDF</b><small id="hPdf">افتح ملفاتك واكتب عليها بالأقلام</small></span><svg class="h-ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button class="h-tool" data-go="board" style="--c:#0891b2"><span class="h-ic"><svg data-i="board"></svg></span><span class="h-tx"><b>السبورة</b><small>ورقة كبيرة بلا حدود، بمربعات أو خطوط أو سادة</small></span><svg class="h-ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button class="h-tool" data-go="lang" style="--c:#db2777"><span class="h-ic"><svg data-i="lang"></svg></span><span class="h-tx"><b>اللغات</b><small>قاموس عربي ⇄ إنجليزي بالنطق ومشتقات الكلمة</small></span><svg class="h-ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
   </div>
 </section>
 
 <!-- TASKS -->
 <section class="view" id="v-tasks">
-  <h1>المهام</h1><p class="sub">اختار المادة وضيف مهامك، سنتر وأونلاين.</p>
-  <div class="seg" id="tkMode"><button data-m="center">سنتر</button><button data-m="online">أونلاين</button></div>
-  <div class="tk" id="tkRoot"></div>
+  <div class="t-top">
+    <div><h1>المهام</h1><p class="sub">اكتب مهامك لكل مادة وعلّم اللي خلصته.</p></div>
+    <div class="seg" id="tkMode" role="group" aria-label="نوع المذاكرة"><button data-m="center">سنتر</button><button data-m="online">أونلاين</button></div>
+  </div>
+  <div id="tkRoot"></div>
+  <div class="t-undo" id="tkUndo" role="status" aria-live="polite"><span></span><button type="button">تراجع</button></div>
 </section>
 
 <!-- TIMER -->
-<section class="view" id="v-timer">
-  <div class="tmx">
-    <div class="modes" id="tmPresets">
-      <button data-p="25"><b>25</b><small>راحة 5</small></button>
-      <button data-p="50"><b>50</b><small>راحة 10</small></button>
-      <button data-p="90"><b>90</b><small>راحة 30</small></button>
-      <button data-p="free"><b>حر</b><small>أنت تحدد</small></button>
+<section class="view" id="v-timer" data-ph="study">
+  <div class="tmhead"><h1>المؤقت</h1><p class="sub">جلسات تركيز بنظام بومودورو، وبيحسب وقت مذاكرتك لكل مادة.</p></div>
+  <div class="tmgrid">
+    <div class="card tmmain" id="tmCard">
+      <div class="tmtop"><button class="vb ico" id="tmZen" title="وضع التركيز (F)"><svg data-i="focus"></svg></button><button class="vb ico" id="tmFs" title="ملء الشاشة"><svg data-i="fs"></svg></button></div>
+      <div class="seg tmtabs" id="tmPh"><button data-ph="study">مذاكرة</button><button data-ph="break">راحة</button></div>
+      <div class="tmring" id="tmRing">
+        <svg viewBox="0 0 320 320"><defs><linearGradient id="tmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--ph)"/><stop offset="1" style="stop-color:var(--ph2)"/></linearGradient></defs>
+          <g id="tmTicks"></g>
+          <g transform="rotate(-90 160 160)"><circle class="tr" cx="160" cy="160" r="132"/><circle class="pr" id="tmArc" cx="160" cy="160" r="132" stroke-dasharray="829.38" stroke-dashoffset="0"/></g>
+          <circle class="hd" id="tmHead" cx="160" cy="28" r="9"/></svg>
+        <div class="tmct"><div class="pl" id="tmPhL">وقت المذاكرة</div><div class="tt" id="tmTime">25:00</div><div class="ts" id="tmSub"></div></div>
+      </div>
+      <div class="tmctl">
+        <button class="rb" id="tmReset" title="إعادة (R)"><svg data-i="reset"></svg></button>
+        <button class="rb go" id="tmGo" title="ابدأ / إيقاف (Space)"><svg data-i="play"></svg></button>
+        <button class="rb" id="tmSkip" title="تخطي (S)"><svg data-i="skip"></svg></button>
+      </div>
+      <div class="tmcyc"><div class="tmdots" id="tmDots"></div><span id="tmCyc"></span></div>
     </div>
-    <div class="free" id="tmFree">
-      <label>مذاكرة (دقيقة)<input type="number" id="fs1" min="1" max="600" value="40"></label>
-      <label>راحة (دقيقة)<input type="number" id="fs2" min="1" max="600" value="10"></label>
-    </div>
-    <div class="ring" id="tmRing">
-      <svg viewBox="0 0 220 220"><defs><linearGradient id="tmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--brand)"/><stop offset="1" style="stop-color:var(--brand2)"/></linearGradient></defs><circle class="tr" cx="110" cy="110" r="96"/><circle class="pr" id="tmArc" cx="110" cy="110" r="96" stroke-dasharray="603.19" stroke-dashoffset="0"/></svg>
-      <div class="ct"><div class="ph" id="tmPh">مذاكرة</div><div class="tt" id="tmTime">25:00</div><div class="ph" id="tmSub"></div></div>
-    </div>
-    <div class="dots" id="tmDots"></div>
-    <div class="ctrl">
-      <button class="rb" id="tmReset" title="إعادة"><svg data-i="reset"></svg></button>
-      <button class="rb go" id="tmGo" title="ابدأ / إيقاف"><svg data-i="play"></svg></button>
-      <button class="rb" id="tmSkip" title="تخطي"><svg data-i="skip"></svg></button>
-    </div>
-    <div class="tmeta"><span>الجلسات المكتملة: <b id="tmCycles">0</b></span><label><input type="checkbox" id="tmAuto" checked> تشغيل المرحلة التالية تلقائياً</label></div>
+    <aside class="tmside">
+      <div class="card tmbox"><h3>مدة الجلسة</h3>
+        <div class="tmpre" id="tmPresets">
+          <button data-p="25"><b>25</b><small>راحة 5</small></button>
+          <button data-p="50"><b>50</b><small>راحة 10</small></button>
+          <button data-p="90"><b>90</b><small>راحة 30</small></button>
+          <button data-p="free"><b>حر</b><small>أنت تحدد</small></button>
+        </div>
+        <div class="free" id="tmFree">
+          <label>مذاكرة (دقيقة)<input type="number" id="fs1" min="1" max="600" value="40"></label>
+          <label>راحة (دقيقة)<input type="number" id="fs2" min="1" max="600" value="10"></label>
+        </div>
+      </div>
+      <div class="card tmbox"><h3>بتذاكر إيه دلوقتي؟</h3><div class="tmsub" id="tmSubj"></div></div>
+      <div class="card tmbox"><h3>النهارده</h3>
+        <div class="tmstat"><div><b id="tmTot">0 د</b><small>وقت المذاكرة</small></div><div><b id="tmN">0</b><small>جلسات مكتملة</small></div></div>
+        <div id="tmBars"></div>
+      </div>
+      <div class="card tmbox"><label class="sw2"><input type="checkbox" id="tmAuto"><i></i><span>تشغيل المرحلة التالية تلقائياً</span></label><label class="sw2"><input type="checkbox" id="tmSound"><i></i><span>صوت التنبيه</span></label><p class="tmkeys">اختصارات: Space بدء/إيقاف · R إعادة · S تخطي · F تركيز</p></div>
+    </aside>
   </div>
 </section>
 
@@ -678,10 +800,10 @@ return{refresh}}
 
 /* ---------- navigation ---------- */
 const VIEWS=['home','tasks','timer','pdf','board','lang'];
-function setFocus(on){document.body.classList.toggle('focus',!!on);['#pFocus','#bFocus'].forEach(i=>{const b=$(i);if(b)b.classList.toggle('on',!!on)});setTimeout(()=>{BDM.resize();PDFM.refit()},120)}
+function setFocus(on){document.body.classList.toggle('focus',!!on);if(!on)$('#v-timer').classList.remove('zen');['#pFocus','#bFocus','#tmZen'].forEach(i=>{const b=$(i);if(b)b.classList.toggle('on',!!on)});setTimeout(()=>{BDM.resize();PDFM.refit()},120)}
 function go(v){if(!VIEWS.includes(v))v='home';if(document.body.classList.contains('focus')&&!(v==='pdf'&&PDF.doc))setFocus(false);if(v!=='lang'&&window.speechSynthesis)speechSynthesis.cancel();VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));$$('nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
 try{history.replaceState(null,'','#'+v)}catch{}
-if(v==='home')renderHome();if(v==='pdf')PDFM.enter();if(v==='board')BDM.enter();if(v==='lang'&&matchMedia('(hover:hover)').matches)setTimeout(()=>$('#lgQ').focus(),60);window.scrollTo(0,0)}
+if(v==='home')renderHome();if(v==='pdf')PDFM.enter();if(v==='board')BDM.enter();if(v==='timer'){renderSubj();renderToday()}if(v==='lang'&&matchMedia('(hover:hover)').matches)setTimeout(()=>$('#lgQ').focus(),60);window.scrollTo(0,0)}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});
 $('#fsBtn').onclick=async()=>{const d=document,el=d.documentElement,inFs=d.fullscreenElement||d.webkitFullscreenElement;
 const fail=()=>toast('ملء الشاشة مش متاح هنا. افتح الملف في تبويب مستقل في المتصفح وجرّب تاني.');
@@ -692,56 +814,136 @@ else if(el.requestFullscreen)await el.requestFullscreen();else if(el.webkitReque
 /* ---------- tasks ---------- */
 const SUBJ=[['ar','عربي','#16a34a'],['hi','تاريخ','#d97706'],['en','إنجليزي','#2563eb'],['sp','مادة التخصص','#9333ea']];
 const blank=()=>({ar:[],hi:[],en:[],sp:[]});
-const TK=Object.assign({mode:'center',sel:'ar',flt:'all',names:{sp:'مادة التخصص'},data:{center:blank(),online:blank()}},LS.get('sh.tasks',{}));
+const TK=Object.assign({mode:'center',sel:'all',names:{sp:'مادة التخصص'},data:{center:blank(),online:blank()}},LS.get('sh.tasks',{}));
 const saveTK=()=>LS.set('sh.tasks',TK);
-const sjName=k=>k==='sp'?TK.names.sp:SUBJ.find(s=>s[0]===k)[1];
+const subjOf=k=>SUBJ.find(s=>s[0]===k);
+const sjName=k=>k==='sp'?TK.names.sp:subjOf(k)[1];
 function tkStats(m){let d=0,t=0;SUBJ.forEach(([k])=>{TK.data[m][k].forEach(x=>{t++;if(x.d)d++})});return{d,t}}
-function renderTasks(){const m=TK.mode,D=TK.data[m],k=TK.sel,col=SUBJ.find(s=>s[0]===k)[2],st=tkStats(m),p=st.t?st.d/st.t:0;
-$$('#tkMode button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
-const shown=D[k].filter(t=>TK.flt==='all'||(TK.flt==='done')===!!t.d);
-$('#tkRoot').innerHTML=`<aside class="card tkside"><div class="sumring"><svg viewBox="0 0 132 132"><circle class="tr" cx="66" cy="66" r="56"/><circle class="pr" cx="66" cy="66" r="56" stroke-dasharray="351.86" stroke-dashoffset="${351.86*(1-p)}"/></svg><div class="lb">${Math.round(p*100)}%<small>${st.d}/${st.t} مكتملة</small></div></div>
-<div class="sjl">${SUBJ.map(([id,,c])=>{const a=D[id],d=a.filter(t=>t.d).length;return`<button class="sj ${id===k?'on':''}" style="--c:${c}" data-sel="${id}"><i></i><span class="n">${esc(sjName(id))}</span><span class="c">${d}/${a.length}</span><div class="mini"><u style="width:${a.length?d/a.length*100:0}%"></u></div></button>`}).join('')}</div></aside>
-<section class="card tkmain" style="--c:${col}"><div class="tkh"><h2 ${k==='sp'?'contenteditable="true" spellcheck="false" data-rename title="اضغط لتغيير الاسم"':''}>${esc(sjName(k))}</h2><button class="link" data-clr>حذف المكتملة</button></div>
-<form class="add"><input placeholder="أضف مهمة جديدة…" maxlength="120"><button>إضافة</button></form>
-<div class="flt">${[['all','الكل'],['todo','المتبقي'],['done','المنجز']].map(([v,n])=>`<button data-f="${v}" class="${TK.flt===v?'on':''}">${n}</button>`).join('')}</div>
-<ul class="tl">${shown.map(t=>`<li class="ti ${t.d?'done':''}" data-id="${t.id}"><button class="chk" data-act="tog" aria-label="تم"></button><span>${esc(t.t)}</span><button class="x" data-act="del" aria-label="حذف">×</button></li>`).join('')||'<li class="emp">لا توجد مهام هنا</li>'}</ul></section>`}
-$('#tkMode').onclick=e=>{const b=e.target.closest('button');if(!b)return;TK.mode=b.dataset.m;saveTK();renderTasks()};
+const TKS={edit:null,ren:false,open:true,addSub:'ar',undo:null,undoT:0};
+const tkSvg=(p,f)=>`<svg viewBox="0 0 24 24" fill="${f?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const TKI={star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',del:'<path d="M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',chev:'<path d="M6 9l6 6 6-6"/>'};
+const tkWord=n=>n===1?'مهمة':n<=10?'مهام':'مهمة';
+function renderTasks(){
+const root=$('#tkRoot');if(!root)return;
+const oi=$('.t-add input',root),draft=oi?oi.value:'',had=oi&&document.activeElement===oi;
+const m=TK.mode,D=TK.data[m];
+if(TK.sel!=='all'&&!subjOf(TK.sel))TK.sel='all';
+const k=TK.sel,all=k==='all',col=all?'var(--brand)':subjOf(k)[2],st=tkStats(m),left=st.t-st.d;
+$$('#tkMode button').forEach(b=>{b.classList.toggle('on',b.dataset.m===m);b.setAttribute('aria-pressed',b.dataset.m===m)});
+const items=[];SUBJ.forEach(([id])=>{if(all||id===k)D[id].forEach(x=>items.push({x,k:id}))});
+const todo=items.filter(i=>!i.x.d).sort((p,q)=>(!!q.x.s)-(!!p.x.s)),done=items.filter(i=>i.x.d);
+const strip=st.t?SUBJ.map(([id,,c])=>{const a=D[id];if(!a.length)return'';const dn=a.filter(t=>t.d).length;
+return`<button class="t-grp" style="--c:${c};flex-grow:${a.length};opacity:${all||id===k?1:.35}" data-sel="${id}" aria-label="${esc(sjName(id))}: ${dn} من ${a.length}">${a.map(t=>`<i class="t-seg${t.d?' d':''}"></i>`).join('')}</button>`}).join(''):'<div class="t-none"></div>';
+const hero=!st.t?`<div class="t-line"><span class="t-lbl">لسه مفيش مهام. ابدأ بأول واحدة.</span></div>`
+:left===0?`<div class="t-line"><span class="t-lbl">خلصت كل المهام. عاش!</span><span class="t-done">${st.d} من ${st.t} مكتملة</span></div>`
+:`<div class="t-line"><span class="t-lbl">باقي</span><span class="t-num">${left}</span><span class="t-lbl">${tkWord(left)}</span><span class="t-done">أنجزت ${st.d} من ${st.t}</span></div>`;
+const tabs=[['all','الكل',null,left],...SUBJ.map(([id,,c])=>[id,sjName(id),c,D[id].filter(t=>!t.d).length])];
+const row=({x,k:rk})=>{const c=subjOf(rk)[2],ed=TKS.edit===String(x.id);
+return`<li class="t-row${x.d?' done':''}" style="--c:${c}" data-id="${x.id}" data-k="${rk}"><button class="t-chk" data-act="tog" role="checkbox" aria-checked="${!!x.d}" aria-label="${esc(x.t)}"></button>${ed?`<input class="t-edit" data-edit value="${esc(x.t)}" maxlength="120" aria-label="تعديل المهمة">`:`<span class="t-txt">${esc(x.t)}</span>`}${all&&!ed?`<span class="t-tag">${esc(sjName(rk))}</span>`:''}<span class="t-acts"><button class="t-ico${x.s?' on':''}" data-act="star" aria-pressed="${!!x.s}" aria-label="تمييز كمهمة مهمة" title="مهم">${tkSvg(TKI.star,x.s)}</button><button class="t-ico" data-act="edit" aria-label="تعديل" title="تعديل">${tkSvg(TKI.edit)}</button><button class="t-ico del" data-act="del" aria-label="حذف" title="حذف">${tkSvg(TKI.del)}</button></span></li>`};
+const empty=!items.length?(all?'لسه مفيش مهام. اكتب أول مهمة فوق.':`لسه مفيش مهام في ${esc(sjName(k))}. اكتب أول مهمة فوق.`):'خلصت كل المهام هنا.';
+const subhd=all?`<div class="t-subhd"><h2>كل المواد</h2></div>`:`<div class="t-subhd" style="--c:${col}">${TKS.ren&&k==='sp'?`<input class="t-rin" data-ren value="${esc(TK.names.sp)}" maxlength="24" aria-label="اسم المادة">`:`<h2>${esc(sjName(k))}</h2>${k==='sp'?'<button class="t-ren" data-ren-go>غيّر الاسم</button>':''}`}</div>`;
+root.innerHTML=`<div class="t-hero">${hero}<div class="t-strip">${strip}</div></div>
+<div class="t-tabs" role="tablist">${tabs.map(([id,n,c,r])=>`<button class="t-tab${id===k?' on':''}" role="tab" aria-selected="${id===k}" data-sel="${id}"${c?` style="--c:${c}"`:''}>${c?'<i></i>':''}${esc(n)}<b aria-label="${r} متبقية">${r}</b></button>`).join('')}</div>
+${subhd}
+<form class="t-add" style="--c:${col}">${all?`<select aria-label="المادة">${SUBJ.map(([id])=>`<option value="${id}"${id===TKS.addSub?' selected':''}>${esc(sjName(id))}</option>`).join('')}</select>`:''}<input placeholder="${all?'أضف مهمة…':`أضف مهمة في ${esc(sjName(k))}…`}" maxlength="120" aria-label="مهمة جديدة" value="${esc(draft)}"><button>إضافة</button></form>
+<div class="t-sec">المتبقي<b>${todo.length}</b></div>
+<ul class="t-list">${todo.map(row).join('')||`<li class="t-empty">${empty}</li>`}</ul>
+${done.length?`<div class="t-sec"><button class="t-fold" data-fold aria-expanded="${TKS.open}">${tkSvg(TKI.chev)}المنجز</button><b>${done.length}</b><button class="link" data-clr>حذف المنجز</button></div>${TKS.open?`<ul class="t-list">${done.map(row).join('')}</ul>`:''}`:''}`;
+if(had){const ni=$('.t-add input',root);ni.focus();ni.setSelectionRange(ni.value.length,ni.value.length)}}
+function tkUndo(msg,fn){TKS.undo=fn;const u=$('#tkUndo');$('span',u).textContent=msg;u.classList.add('on');clearTimeout(TKS.undoT);TKS.undoT=setTimeout(()=>{u.classList.remove('on');TKS.undo=null},6000)}
+$('#tkUndo button').onclick=()=>{const f=TKS.undo;TKS.undo=null;clearTimeout(TKS.undoT);$('#tkUndo').classList.remove('on');if(f){f();saveTK();renderTasks()}};
+$('#tkMode').onclick=e=>{const b=e.target.closest('button');if(!b)return;TK.mode=b.dataset.m;TKS.edit=null;saveTK();renderTasks()};
 const tkRoot=$('#tkRoot');
+function tkCommitEdit(el){if(TKS.edit===null)return;const id=TKS.edit;TKS.edit=null;const v=el.value.trim(),row=el.closest('li');
+if(row&&v){const x=TK.data[TK.mode][row.dataset.k].find(t=>String(t.id)===id);if(x){x.t=v;saveTK()}}renderTasks()}
 tkRoot.addEventListener('click',e=>{const t=e.target;let b;
-if(b=t.closest('[data-sel]')){TK.sel=b.dataset.sel;saveTK();renderTasks();return}
-if(b=t.closest('[data-f]')){TK.flt=b.dataset.f;saveTK();renderTasks();return}
-if(t.closest('[data-clr]')){const D=TK.data[TK.mode];D[TK.sel]=D[TK.sel].filter(x=>!x.d);saveTK();renderTasks();return}
-if(b=t.closest('[data-act]')){const li=b.closest('li'),L=TK.data[TK.mode][TK.sel],i=L.findIndex(x=>String(x.id)===li.dataset.id);if(i<0)return;if(b.dataset.act==='tog')L[i].d=!L[i].d;else L.splice(i,1);saveTK();renderTasks()}});
-tkRoot.addEventListener('submit',e=>{e.preventDefault();const i=$('input',e.target),v=i.value.trim();if(!v)return;TK.data[TK.mode][TK.sel].push({id:Date.now()+Math.random(),t:v,d:false});saveTK();renderTasks();$('.add input',tkRoot).focus()});
-tkRoot.addEventListener('keydown',e=>{if(e.target.matches('[data-rename]')&&e.key==='Enter'){e.preventDefault();e.target.blur()}});
-tkRoot.addEventListener('focusout',e=>{if(e.target.matches('[data-rename]')){TK.names.sp=e.target.textContent.trim()||'مادة التخصص';saveTK();renderTasks()}});
+if(b=t.closest('[data-sel]')){TK.sel=b.dataset.sel;TKS.edit=null;TKS.ren=false;saveTK();renderTasks();return}
+if(t.closest('[data-fold]')){TKS.open=!TKS.open;renderTasks();return}
+if(t.closest('[data-ren-go]')){TKS.ren=true;renderTasks();const i=$('[data-ren]',tkRoot);if(i){i.focus();i.select()}return}
+if(t.closest('[data-clr]')){const D=TK.data[TK.mode],gone=[];
+SUBJ.forEach(([id])=>{if(TK.sel!=='all'&&id!==TK.sel)return;D[id].forEach((x,i)=>{if(x.d)gone.push({id,x,i})});D[id]=D[id].filter(x=>!x.d)});
+if(!gone.length)return;saveTK();renderTasks();const mode=TK.mode;
+tkUndo(`اتحذفت ${gone.length} ${tkWord(gone.length)}`,()=>{gone.forEach(g=>TK.data[mode][g.id].splice(g.i,0,g.x))});return}
+if(b=t.closest('[data-act]')){const li=b.closest('li'),L=TK.data[TK.mode][li.dataset.k],i=L.findIndex(x=>String(x.id)===li.dataset.id);if(i<0)return;const x=L[i],a=b.dataset.act;
+if(a==='tog')x.d=!x.d;
+else if(a==='star')x.s=!x.s;
+else if(a==='edit'){TKS.edit=String(x.id);renderTasks();const inp=$('[data-edit]',tkRoot);if(inp){inp.focus();inp.select()}return}
+else{L.splice(i,1);const mode=TK.mode,kk=li.dataset.k;saveTK();renderTasks();tkUndo('اتحذفت المهمة',()=>{TK.data[mode][kk].splice(i,0,x)});return}
+saveTK();renderTasks()}});
+tkRoot.addEventListener('submit',e=>{e.preventDefault();const f=e.target,i=$('input',f),v=i.value.trim();if(!v)return;
+const s=$('select',f),k=s?s.value:TK.sel;TK.data[TK.mode][k].push({id:Date.now()+Math.random(),t:v,d:false});saveTK();i.value='';renderTasks();$('.t-add input',tkRoot).focus()});
+tkRoot.addEventListener('change',e=>{if(e.target.matches('.t-add select'))TKS.addSub=e.target.value});
+tkRoot.addEventListener('keydown',e=>{const t=e.target;
+if(t.matches('[data-edit]')){if(e.key==='Enter'){e.preventDefault();tkCommitEdit(t)}else if(e.key==='Escape'){TKS.edit=null;renderTasks()}}
+if(t.matches('[data-ren]')){if(e.key==='Enter'){e.preventDefault();t.blur()}else if(e.key==='Escape'){TKS.ren=false;renderTasks()}}});
+tkRoot.addEventListener('focusout',e=>{const t=e.target;
+if(t.matches('[data-edit]'))tkCommitEdit(t);
+if(t.matches('[data-ren]')&&TKS.ren){TKS.ren=false;TK.names.sp=t.value.trim()||'مادة التخصص';saveTK();renderTasks()}});
 
 /* ---------- timer ---------- */
 const PRE={'25':[25,5],'50':[50,10],'90':[90,30]};
-const TMS=Object.assign({preset:'25',fs:40,fb:10,auto:true},LS.get('sh.timer',{}));
-const TM={study:25,brk:5,phase:'study',left:25*60000,running:false,endAt:0,cycles:0};
+const TMS=Object.assign({preset:'25',fs:40,fb:10,auto:true,sound:true,subj:'ar'},LS.get('sh.timer',{}));
+const TM={study:25,brk:5,phase:'study',left:25*60000,running:false,endAt:0,cnt:0};
+const TLOG=LS.get('sh.timer.log',{});
+const dayKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+let tlT;const saveLog=()=>{clearTimeout(tlT);tlT=setTimeout(()=>{const ks=Object.keys(TLOG).sort();while(ks.length>40)delete TLOG[ks.shift()];LS.set('sh.timer.log',TLOG)},700)};
+const todayW=()=>TLOG[dayKey()]||(TLOG[dayKey()]={n:0,s:{}});
+const addStudy=ms=>{if(ms>0){const t=todayW();t.s[TMS.subj]=(t.s[TMS.subj]||0)+ms;saveLog()}};
+const saveST=()=>LS.set('sh.timer.st',{phase:TM.phase,left:TM.left,running:TM.running,endAt:TM.endAt,cnt:TM.cnt});
 const fmt=ms=>{const s=Math.ceil(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const fmtDur=ms=>{const m=Math.round(ms/60000),h=Math.floor(m/60);return h?`${h} س ${m%60} د`:`${m} د`};
 const tmDur=()=>(TM.phase==='study'?TM.study:TM.brk)*60000;
-function applyPreset(k,keep){TMS.preset=k;if(k==='free'){TM.study=Math.max(1,+TMS.fs||40);TM.brk=Math.max(1,+TMS.fb||10)}else[TM.study,TM.brk]=PRE[k];
-if(!keep){TM.running=false;TM.phase='study';TM.left=tmDur()}LS.set('sh.timer',TMS);renderTM()}
-function beep(){try{const a=new(window.AudioContext||window.webkitAudioContext)();[0,.35,.7].forEach(t=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=880;o.connect(g);g.connect(a.destination);g.gain.setValueAtTime(.0001,a.currentTime+t);g.gain.exponentialRampToValueAtTime(.3,a.currentTime+t+.03);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t+.3);o.start(a.currentTime+t);o.stop(a.currentTime+t+.32)});setTimeout(()=>a.close(),1500)}catch{}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch{}}
-function phaseEnd(){beep();if(TM.phase==='study')TM.cycles++;TM.phase=TM.phase==='study'?'break':'study';TM.left=tmDur();if(TMS.auto)TM.endAt=Date.now()+TM.left;else TM.running=false;toast(TM.phase==='break'?'خلصت المذاكرة — خد راحة':'يلا نرجع نذاكر')}
-function renderTM(){const tot=tmDur(),brk=TM.phase==='break';
-$('#tmTime').textContent=fmt(TM.left);$('#tmPh').textContent=brk?'راحة':'مذاكرة';$('#tmSub').textContent=TM.running?'':'متوقف';
-$('#tmArc').style.strokeDashoffset=603.19*(1-TM.left/tot);$('#tmRing').classList.toggle('brk',brk);
+const TMC=2*Math.PI*132;let tmTk=0,AC=null;
+$('#tmTicks').innerHTML=Array.from({length:60},(_,i)=>{const a=i*Math.PI/30,r1=146,r2=i%5?150:154;return`<line class="tk${i%5?'':' m'}" x1="${(160+r1*Math.sin(a)).toFixed(2)}" y1="${(160-r1*Math.cos(a)).toFixed(2)}" x2="${(160+r2*Math.sin(a)).toFixed(2)}" y2="${(160-r2*Math.cos(a)).toFixed(2)}"/>`}).join('');
+function tmAudio(){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch{}return AC}
+function beep(){if(TMS.sound){try{const a=tmAudio(),t0=a.currentTime;[[0,660],[.28,880],[.56,1100]].forEach(([t,f])=>{const o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.value=f;o.connect(g);g.connect(a.destination);g.gain.setValueAtTime(.0001,t0+t);g.gain.exponentialRampToValueAtTime(.28,t0+t+.03);g.gain.exponentialRampToValueAtTime(.0001,t0+t+.5);o.start(t0+t);o.stop(t0+t+.52)})}catch{}}
+try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch{}}
+function countStudy(){if(TM.phase!=='study')return;const el=tmDur()-TM.left;if(el>TM.cnt){addStudy(el-TM.cnt);TM.cnt=el}}
+function syncLeft(){if(TM.running){TM.left=Math.max(0,TM.endAt-Date.now());countStudy()}}
+function applyPreset(k,keep){if(!keep)syncLeft();TMS.preset=k;if(k==='free'){TM.study=Math.max(1,+TMS.fs||40);TM.brk=Math.max(1,+TMS.fb||10)}else[TM.study,TM.brk]=PRE[k];
+if(!keep){TM.running=false;TM.phase='study';TM.left=tmDur();TM.cnt=0;saveST()}LS.set('sh.timer',TMS);renderTM()}
+function phaseEnd(){beep();if(TM.phase==='study'){todayW().n++;saveLog()}TM.phase=TM.phase==='study'?'break':'study';TM.left=tmDur();TM.cnt=0;if(TMS.auto)TM.endAt=Date.now()+TM.left;else TM.running=false;renderToday();saveST();toast(TM.phase==='break'?'خلصت المذاكرة — خد راحة':'يلا نرجع نذاكر')}
+function renderTM(){const tot=tmDur(),brk=TM.phase==='break',p=Math.max(0,Math.min(1,TM.left/tot));
+$('#v-timer').dataset.ph=TM.phase;
+$('#tmTime').textContent=fmt(TM.left);$('#tmPhL').textContent=brk?'وقت الراحة':'وقت المذاكرة';
+$('#tmSub').textContent=TM.running?'ينتهي '+new Date(TM.endAt).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):(TM.left<tot?'متوقف':(brk?'خد نفس واسترخي':sjName(TMS.subj)));
+$('#tmArc').style.strokeDashoffset=TMC*(1-p);
+const ang=(-90+360*p)*Math.PI/180,hd=$('#tmHead');hd.setAttribute('cx',(160+132*Math.cos(ang)).toFixed(2));hd.setAttribute('cy',(160+132*Math.sin(ang)).toFixed(2));hd.style.display=p>.002?'':'none';
 $('#tmGo').innerHTML=icon(TM.running?'pause':'play');
-$('#tmDots').innerHTML=[0,1,2,3].map(i=>`<i class="${i<TM.cycles%4?'on':''}"></i>`).join('');
-$('#tmCycles').textContent=TM.cycles;$('#tmAuto').checked=TMS.auto;$('#tmFree').classList.toggle('on',TMS.preset==='free');
+$$('#tmPh button').forEach(b=>b.classList.toggle('on',b.dataset.ph===TM.phase));
 $$('#tmPresets button').forEach(b=>b.classList.toggle('on',b.dataset.p===TMS.preset));
+$('#tmFree').classList.toggle('on',TMS.preset==='free');
+$('#tmAuto').checked=TMS.auto;$('#tmSound').checked=TMS.sound;
 document.title=TM.running?`${fmt(TM.left)} — ${brk?'راحة':'مذاكرة'}`:'منصة المذاكرة — ثانية بكالوريا';
 $('#hTimer').textContent=fmt(TM.left);$('#hTimerP').textContent=TM.running?(brk?'راحة شغالة':'مذاكرة شغالة'):'جاهز للبدء'}
-setInterval(()=>{if(!TM.running)return;TM.left=Math.max(0,TM.endAt-Date.now());if(TM.left<=0)phaseEnd();renderTM()},250);
-$('#tmGo').onclick=()=>{if(TM.running){TM.left=Math.max(0,TM.endAt-Date.now());TM.running=false}else{if(TM.left<=0)TM.left=tmDur();TM.endAt=Date.now()+TM.left;TM.running=true}renderTM()};
-$('#tmReset').onclick=()=>{TM.running=false;TM.phase='study';TM.left=tmDur();renderTM()};
-$('#tmSkip').onclick=()=>{const was=TM.running;TM.phase=TM.phase==='study'?'break':'study';TM.left=tmDur();TM.endAt=Date.now()+TM.left;TM.running=was;renderTM()};
+function renderSubj(){$('#tmSubj').innerHTML=SUBJ.map(([id,,c])=>`<button class="sjc ${id===TMS.subj?'on':''}" style="--c:${c}" data-s="${id}"><i></i>${esc(sjName(id))}</button>`).join('')}
+function renderToday(){const t=TLOG[dayKey()]||{n:0,s:{}},tot=Object.values(t.s).reduce((a,b)=>a+b,0),rows=SUBJ.filter(([id])=>t.s[id]>0);
+$('#tmTot').textContent=fmtDur(tot);$('#tmN').textContent=t.n;
+$('#tmBars').innerHTML=rows.length?rows.map(([id,,c])=>`<div class="tbr" style="--c:${c}"><div class="tbl"><span>${esc(sjName(id))}</span><b>${fmtDur(t.s[id])}</b></div><div class="tbb"><i style="width:${tot?t.s[id]/tot*100:0}%"></i></div></div>`).join(''):'<p class="tmnone">لسه مذاكرتش النهارده — ابدأ أول جلسة 💪</p>';
+$('#tmDots').innerHTML=[0,1,2,3].map(i=>`<i class="${i<t.n%4?'on':''}"></i>`).join('');
+$('#tmCyc').textContent=t.n?`${t.n} جلسة النهارده`:'جلسة جديدة'}
+function tmRestore(){const st=LS.get('sh.timer.st',null);TM.phase='study';TM.cnt=0;TM.running=false;TM.left=tmDur();
+if(st&&(st.phase==='study'||st.phase==='break')){TM.phase=st.phase;TM.cnt=st.cnt||0;const tot=tmDur();
+if(st.running&&st.endAt){const l=st.endAt-Date.now();
+if(l>0&&l<=tot){TM.left=l;TM.endAt=st.endAt;TM.running=true}
+else{if(TM.phase==='study'){addStudy(Math.max(0,tot-TM.cnt));todayW().n++;saveLog()}TM.phase=TM.phase==='study'?'break':'study';TM.left=tmDur();TM.cnt=0}}
+else if(st.left>0&&st.left<=tot)TM.left=st.left}
+renderTM();renderSubj();renderToday()}
+function tmToggle(){if(TM.running){syncLeft();TM.running=false;renderToday()}else{if(TM.left<=0)TM.left=tmDur();tmAudio();TM.endAt=Date.now()+TM.left;TM.running=true}renderTM();saveST()}
+function tmReset(){syncLeft();TM.running=false;TM.phase='study';TM.left=tmDur();TM.cnt=0;renderTM();renderToday();saveST()}
+function tmSkip(){syncLeft();const was=TM.running;TM.phase=TM.phase==='study'?'break':'study';TM.left=tmDur();TM.cnt=0;TM.endAt=Date.now()+TM.left;TM.running=was;renderTM();renderToday();saveST()}
+function tmZen(on){setFocus(on);$('#v-timer').classList.toggle('zen',!!on)}
+setInterval(()=>{if(!TM.running)return;TM.left=Math.max(0,TM.endAt-Date.now());countStudy();if(TM.left<=0)phaseEnd();renderTM();if(TM.phase==='study'&&++tmTk%20===0){renderToday();saveST()}},250);
+$('#tmGo').onclick=tmToggle;$('#tmReset').onclick=tmReset;$('#tmSkip').onclick=tmSkip;
+$('#tmZen').onclick=()=>tmZen(!document.body.classList.contains('focus'));$('#tmFs').onclick=()=>$('#fsBtn').click();
+$('#tmPh').onclick=e=>{const b=e.target.closest('button');if(!b||b.dataset.ph===TM.phase)return;syncLeft();TM.phase=b.dataset.ph;TM.left=tmDur();TM.cnt=0;TM.running=false;renderTM();renderToday();saveST()};
 $('#tmPresets').onclick=e=>{const b=e.target.closest('button');if(b)applyPreset(b.dataset.p)};
+$('#tmSubj').onclick=e=>{const b=e.target.closest('button');if(!b)return;syncLeft();TMS.subj=b.dataset.s;LS.set('sh.timer',TMS);renderSubj();renderTM()};
 $('#tmAuto').onchange=e=>{TMS.auto=e.target.checked;LS.set('sh.timer',TMS)};
+$('#tmSound').onchange=e=>{TMS.sound=e.target.checked;LS.set('sh.timer',TMS);if(TMS.sound)tmAudio()};
 ['fs1','fs2'].forEach((id,i)=>{const el=$('#'+id);el.value=i?TMS.fb:TMS.fs;el.onchange=()=>{const v=Math.max(1,Math.min(600,+el.value||1));el.value=v;TMS[i?'fb':'fs']=v;if(TMS.preset==='free'&&!TM.running)applyPreset('free');else LS.set('sh.timer',TMS)}});
+addEventListener('keydown',e=>{if(e.code==='Escape'&&$('#v-timer').classList.contains('zen')){setFocus(false);return}const tg=e.target;if(tg.closest&&tg.closest('input,textarea,button,[contenteditable]'))return;if(!$('#v-timer').classList.contains('on')||e.ctrlKey||e.metaKey||e.altKey)return;
+if(e.code==='Space'){e.preventDefault();tmToggle()}else if(e.code==='KeyR')tmReset();else if(e.code==='KeyS')tmSkip();else if(e.code==='KeyF')tmZen(!document.body.classList.contains('focus'));else if(e.code==='Escape'&&document.body.classList.contains('focus'))setFocus(false)});
 
 /* ---------- PDF module ---------- */
 const PDF={doc:null,id:null,n:1,N:0,zoom:1,pw:612,ph:792,tok:0,fit:'w',rt:null,store:new Store(),rec:null,txt:new Map()};
@@ -1138,14 +1340,33 @@ if(e.target.closest('[data-rclr]')){LGS.recent=[];saveLG();renderRecent()}});
 lgUI();renderRecent();lgIntro();
 
 /* ---------- home ---------- */
-function renderHome(){const h=new Date().getHours();$('#hello').textContent=(h<5?'سهرة موفقة':h<12?'صباح الخير':h<18?'نهارك سعيد':'مساء الخير')+' 👋';
+const HM=['center','online'];
+function homeNext(){const out=[];[TK.mode,TK.mode==='center'?'online':'center'].forEach(m=>SUBJ.forEach(([k])=>TK.data[m][k].forEach(x=>{if(!x.d)out.push({x,k,m})})));return out.sort((a,b)=>(!!b.x.s)-(!!a.x.s))[0]||null}
+function renderHome(){const h=new Date().getHours();
+$('#hello').textContent=h<5?'سهرة موفقة':h<12?'صباح الخير':h<18?'نهارك سعيد':'مساء الخير';
 $('#today').textContent=new Date().toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
-const a=tkStats('center'),b=tkStats('online'),d=a.d+b.d,t=a.t+b.t;$('#hTasks').textContent=t?`${d} من ${t} مهمة مكتملة`:'ابدأ بإضافة مهامك';$('#hTasksBar').style.width=(t?d/t*100:0)+'%';
+let d=0,t=0;HM.forEach(m=>{const s=tkStats(m);d+=s.d;t+=s.t});const left=t-d,nx=homeNext();
+let c='var(--brand)',hero;
+if(!t)hero=`<div class="h-kick">ابدأ من هنا</div><div class="h-task">مفيش مهام لسه. اكتب أول مهمة وابدأ.</div><div class="h-acts"><button class="h-go" data-go="tasks">${icon('tasks')}ضيف مهمة</button></div>`;
+else if(!nx)hero=`<div class="h-kick">كل حاجة خلصت</div><div class="h-task">خلصت كل مهامك. عاش!</div><div class="h-acts"><button class="h-go" data-go="timer">${icon('play')}ابدأ جلسة مذاكرة</button><button class="h-ok" data-go="tasks">${icon('tasks')}مهام جديدة</button></div>`;
+else{c=subjOf(nx.k)[2];const run=TM.running&&TM.phase==='study';
+hero=`<div class="h-kick">مهمتك الجاية<span class="h-tag">${esc(sjName(nx.k))}</span><span>${nx.m==='center'?'سنتر':'أونلاين'}</span></div><div class="h-task">${esc(nx.x.t)}</div><div class="h-acts"><button class="h-go" data-hstart="${nx.k}">${icon('play')}${run?'كمّل الجلسة':'ابدأ جلسة'}</button><button class="h-ok" data-hdone="${nx.x.id}" data-k="${nx.k}" data-m="${nx.m}">${icon('tasks')}تمّت</button></div>`}
+const H=$('#hHero');H.style.setProperty('--c',c);H.innerHTML=hero;
+const lg=TLOG[dayKey()]||{n:0,s:{}},tot=Object.values(lg.s).reduce((a,b)=>a+b,0),rows=SUBJ.filter(([id])=>lg.s[id]>0);
+$('#hDay').innerHTML=`<div class="h-dl">مذاكرة النهارده</div><div class="h-dv">${fmtDur(tot)}</div>${rows.length?rows.map(([id,,cc])=>`<div class="h-dr" style="--c:${cc}"><div class="h-drl"><span><i></i>${esc(sjName(id))}</span><b>${fmtDur(lg.s[id])}</b></div><div class="h-drb"><u style="width:${lg.s[id]/tot*100}%"></u></div></div>`).join(''):'<p class="h-note">لسه مذاكرتش النهارده. أول جلسة هتتحسب هنا.</p>'}<div class="h-dm"><span>${lg.n} جلسة</span><span>${left} متبقية</span></div>`;
+$('#hSubs').innerHTML=SUBJ.map(([id,,cc])=>{let dn=0,tt=0;HM.forEach(m=>{const a=TK.data[m][id];tt+=a.length;dn+=a.filter(x=>x.d).length});const r=tt-dn;
+return`<button class="h-sub" style="--c:${cc}" data-hsub="${id}"><span class="h-sn"><i></i>${esc(sjName(id))}</span><span class="h-sv"><b>${r}</b><span>${tt?(r?'متبقية':'خلصت كلها'):'فاضية'}</span></span><span class="h-sp"><u style="width:${tt?dn/tt*100:0}%"></u></span></button>`}).join('');
+$('#hTasks').textContent=t?`${d} من ${t} مكتملة`:'ابدأ بإضافة مهامك';$('#hTasksV').textContent=left||'';
 DB.all('files').then(f=>{if(f.length)$('#hPdf').textContent=`${f.length} ملف حديث`})}
+$('#v-home').addEventListener('click',e=>{let b;
+if(b=e.target.closest('[data-hstart]')){syncLeft();TMS.subj=b.dataset.hstart;LS.set('sh.timer',TMS);renderSubj();if(!TM.running&&TM.phase==='study')tmToggle();go('timer');return}
+if(b=e.target.closest('[data-hdone]')){const x=TK.data[b.dataset.m][b.dataset.k].find(t=>String(t.id)===b.dataset.hdone);if(x){x.d=true;saveTK();renderTasks();renderHome()}return}
+if(b=e.target.closest('[data-hsub]')){const k=b.dataset.hsub,rem=m=>TK.data[m][k].filter(x=>!x.d).length,o=TK.mode==='center'?'online':'center';
+if(!rem(TK.mode)&&rem(o))TK.mode=o;TK.sel=k;saveTK();renderTasks();go('tasks')}});
 
 /* ---------- init ---------- */
 hydrate();$('#fsBtn').innerHTML=icon('fs');
-renderTasks();applyPreset(TMS.preset);bdFmtUI();
+renderTasks();applyPreset(TMS.preset,true);tmRestore();bdFmtUI();
 go((location.hash||'#home').slice(1));
 </script>
 </body>
